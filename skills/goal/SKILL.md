@@ -113,6 +113,6 @@ When teams complete, they will push their branches and notify the Program Manage
 
 ## Notes
 
-- `/start` is available to re-launch teams manually (e.g. after a failure)
+- `/recover` is available to re-launch teams manually (e.g. after a failure)
 - If the user wants to revise epics later, they can re-run /goal (overwrite confirmation in step 1)
 - The `{test_command}` for each repo is not known at this stage — Devs will determine it when they explore their repos

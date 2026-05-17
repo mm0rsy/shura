@@ -7,22 +7,23 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 | Command | Description |
 |---------|-------------|
 | `/init` | Initialize a shura project directory |
-| `/add-repo` | Add a repo to the council (local worktree or remote clone) |
-| `/goal` | Set the mission; stakeholder meeting with SM; auto-launches teams |
+| `/add-repo` | Add a repo to the council (local worktree or remote clone); branch is named after the project automatically |
+| `/goal` | Set the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Talk to the Program Manager at any time |
-| `/start` | Manually re-launch teams (recovery — normally auto-triggered by /goal) |
+| `/recover` | Re-launch teams manually (recovery — normally auto-triggered by /goal) |
 
 ## Agent Hierarchy
 
 ```
-User ─── /get-manager ──► Program Manager
+User ─── /get-manager ──► Program Manager (PM)
                                │
                     ┌──────────┼──────────┐
                     ▼          ▼          ▼
-              Engineering Manager  Engineering Manager  Engineering Manager
+             Engineering    Engineering  Engineering
+             Manager (EM)   Manager (EM) Manager (EM)
                     │
                     ▼
-              Product Owner
+             Product Owner (PO)
                     │
                ┌────┴────┐
                ▼         ▼
@@ -31,14 +32,25 @@ User ─── /get-manager ──► Program Manager
 
 ## Communication Rules
 
-- **User ↔ Program Manager** — only touch point for the user
-- **Program Manager ↔ Engineering Managers** — bidirectional, runs "board meetings"
-- **Engineering Manager → PO** — assigns epics downward only
-- **PO → Devs** — assigns tasks; can spawn additional Devs for parallelism
-- **Escalation path:** Dev → PO → Engineering Manager → Board (all EMs + PM)
+- **User ↔ PM** — only touch point for the user
+- **PM ↔ EM** — bidirectional; PM runs board meetings
+- **EM → PO** (assignments); **PO → EM** (escalations only)
+- **PO → Dev** — assigns tasks; can spawn additional Devs for parallelism
+- **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts
+- **Escalation path:** Dev → PO → EM → Board (all EMs + PM)
 
 ## Getting Started
 
 1. `/init` — name your project
 2. `/add-repo` — add each repository
 3. `/goal` — state the mission; teams launch automatically after the stakeholder meeting
+
+## Glossary
+
+| Term | Role |
+|------|------|
+| PM | Program Manager — user's only touchpoint; coordinates all teams |
+| EM | Engineering Manager — one per repo; owns the epic, spawns PO |
+| PO | Product Owner — breaks epic into tasks, manages and spawns Devs |
+| Dev | Developer agent — executes tasks; can be spawned dynamically for parallelism |
+| Board | All EMs + PM — convenes for cross-repo decisions and escalations |

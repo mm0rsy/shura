@@ -1,13 +1,13 @@
 ---
-name: start
-description: Use when the user runs /start to manually launch or re-launch the repo agent teams, bypassing the /goal stakeholder meeting (e.g. after a failure or when epics are already set).
+name: recover
+description: Use when the user runs /recover to manually re-launch repo agent teams after a failure, bypassing the /goal stakeholder meeting when epics are already set.
 ---
 
-# /start — Launch the Council Teams
+# /recover — Re-launch the Council Teams
 
-Manually launches one team per repo, all running in parallel. This is the recovery path — normally teams are launched automatically at the end of /goal. Use /start when re-launching after a failure or when epics are already confirmed.
+Manually launches one team per repo, all running in parallel. This is the recovery path — normally teams are launched automatically at the end of /goal. Use /recover when re-launching after a failure or when epics are already confirmed.
 
-> **Note:** In the normal flow, teams launch automatically after the stakeholder meeting in /goal. /start is for manual control only.
+> **Note:** In the normal flow, teams launch automatically after the stakeholder meeting in /goal. /recover is for manual control only.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ List and read all `.shura/repos/*/config.json`. Only proceed for repos where `ep
 
 **2. Load all agent prompt templates**
 
-Find the shura plugin directory (two levels up from `skills/start/`). Read:
+Find the shura plugin directory (two levels up from `skills/recover/`). Read:
 - `agents/eng-manager.md`
 
 (The Engineering Manager will read `agents/po.md` itself when spawning the PO; the PO will read `agents/dev.md` itself when spawning Devs.)
@@ -36,11 +36,11 @@ Find the shura plugin directory (two levels up from `skills/start/`). Read:
 
 Display:
 ```
-Launching shura council for: {project_name}
+Recovering shura council for: {project_name}
 Repositories: {N} repos
   {for each repo: - {name} | branch: {branch}}
 
-Starting all teams simultaneously...
+Re-launching all teams simultaneously...
 ```
 
 **4. Dispatch all Engineering Manager agents in parallel**
@@ -53,7 +53,7 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{branch}` → `repo.branch`
 - `{goal}` → `config.goal`
 - `{epic}` → `repo.epic`
-- `{plugin_dir}` → absolute path to the shura plugin directory (the directory containing this skills/start/SKILL.md, two levels up)
+- `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/recover/`)
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 
 Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
@@ -65,10 +65,10 @@ Update `.shura/config.json`: set `status` to `"running"`.
 **6. Confirm**
 
 ```
-✓ All {N} teams launched.
+✓ All {N} teams re-launched.
 
 Each team is running:
-  Engineering Manager → will spawn PO → PO will spawn Dev(s)
+  Engineering Manager (EM) → will spawn PO → PO will spawn Dev(s)
 
 Use /get-manager to talk to the Program Manager and track overall progress.
 When teams complete, they will push their branches and notify the Program Manager.
@@ -78,8 +78,8 @@ When teams complete, they will push their branches and notify the Program Manage
 
 Each Engineering Manager pushes its branch and notifies the Program Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
 
-## Re-running /start
+## Re-running /recover
 
 If teams were already launched (`status: "running"`), warn:
-> "Teams are already running. Use /get-manager to check status. Re-run /start to restart all teams from scratch?"
+> "Teams are already running. Use /get-manager to check status. Re-run /recover to restart all teams from scratch?"
 Wait for confirmation before re-dispatching.

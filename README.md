@@ -2,6 +2,14 @@
 
 A multi-agent orchestration system for coordinating work across multiple repositories simultaneously. Inspired by the Arabic consultative council concept.
 
+## Installation
+
+```bash
+claude plugin install https://github.com/mm0rsy/shura
+```
+
+Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, `/init`, `/add-repo`, `/goal`, `/get-manager`, and `/recover` commands are available in any Claude Code session.
+
 ## Commands
 
 | Command | Description |

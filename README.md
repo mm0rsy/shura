@@ -34,6 +34,7 @@ User ─── /get-manager ──► Program Manager (PM)
 
 - **User ↔ PM** — only touch point for the user
 - **PM ↔ EM** — bidirectional; PM runs board meetings
+- **EM ↔ EM** — peer communication during Board sessions only
 - **EM → PO** (assignments); **PO → EM** (escalations only)
 - **PO → Dev** — assigns tasks; can spawn additional Devs for parallelism
 - **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts

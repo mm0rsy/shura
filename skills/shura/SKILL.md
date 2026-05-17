@@ -43,6 +43,7 @@ User
 
 - **User speaks only to Program Manager (PM)**
 - **PM ↔ EM** — bidirectional; PM runs board meetings
+- **EM ↔ EM** — peer communication during Board sessions only
 - **EM → PO** (assignments); **PO → EM** (escalations only)
 - **PO → Dev** — assigns tasks; Dev escalates up if blocked
 - **Board meeting** — triggered when any EM escalates; all EMs + PM attend

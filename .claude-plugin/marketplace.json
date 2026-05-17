@@ -1,0 +1,31 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "shura",
+  "metadata": {
+    "description": "Multi-agent, multi-repo orchestration for Claude Code."
+  },
+  "owner": {
+    "name": "mm0rsy",
+    "url": "https://github.com/mm0rsy"
+  },
+  "plugins": [
+    {
+      "name": "shura",
+      "description": "Multi-agent, multi-repo orchestration for Claude Code. Each repo gets its own team (EM + PO + Dev), coordinated by a Program Manager.",
+      "version": "0.1.0",
+      "author": {
+        "name": "mm0rsy",
+        "url": "https://github.com/mm0rsy"
+      },
+      "source": "./",
+      "category": "developer-tools",
+      "homepage": "https://github.com/mm0rsy/shura",
+      "tags": [
+        "multi-agent",
+        "orchestration",
+        "multi-repo",
+        "developer-tools"
+      ]
+    }
+  ]
+}

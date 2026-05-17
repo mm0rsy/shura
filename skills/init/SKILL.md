@@ -1,6 +1,6 @@
 ---
 name: init
-description: Use when the user runs /init to initialize a new shura project directory with a name and ticket ID.
+description: Use when the user runs /init to start a new shura project.
 ---
 
 # /init — Initialize Shura Project
@@ -70,6 +70,6 @@ Next steps:
 ## Notes
 
 - The project directory is created in the current working directory
-- All subsequent commands (`/add-repo`, `/goal`, `/start`) must be run from inside `<project-name>/`
+- All subsequent commands (`/add-repo`, `/goal`, `/recover`) must be run from inside `<project-name>/`
 - The `repos/` subdirectory is where worktrees and clones will live
 - `.shura/` holds state only — not code

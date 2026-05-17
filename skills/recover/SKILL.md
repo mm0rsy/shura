@@ -1,6 +1,6 @@
 ---
 name: recover
-description: Use when the user runs /recover to manually re-launch repo agent teams after a failure, bypassing the /goal stakeholder meeting when epics are already set.
+description: Use when teams need to be re-launched after a failure or /goal ran but teams did not start.
 ---
 
 # /recover — Re-launch the Council Teams

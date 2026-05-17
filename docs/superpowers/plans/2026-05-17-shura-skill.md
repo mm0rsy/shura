@@ -1,5 +1,7 @@
 # Shura Skill — Implementation Plan
 
+> **Historical document.** This plan predates several design changes: /init↔/start command swap, Senior Manager → Program Manager and Repo Manager → Engineering Manager renames, and auto-launch behavior in /goal. See README.md for current structure.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build the shura Claude Code plugin — a multi-agent, multi-repo orchestration system where each repository gets its own Manager + PO + Dev team, coordinated by a Senior Manager toward a shared cross-repo mission.

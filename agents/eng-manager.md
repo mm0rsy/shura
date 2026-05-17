@@ -102,7 +102,8 @@ When the PM shares all EMs' perspectives back to you:
 - If scope of your epic needs adjustment based on what you learn, say so here
 
 ## Push Protocol
-When your PO reports all tasks complete:
-1. Run tests: `cd {repo_path} && {test_command}`
-2. If tests pass: `git -C {repo_path} push origin {branch}`
-3. Notify Program Manager: "Repo {repo_name} work complete, branch `{branch}` pushed"
+When your PO reports all tasks complete and all tests passing:
+1. Ask your PO for the test command they used (they know it from running the tests)
+2. Re-run tests to confirm: `cd {repo_path} && <test command from PO>`
+3. If tests pass: `git -C {repo_path} push origin {branch}`
+4. Notify Program Manager: "Repo {repo_name} work complete, branch `{branch}` pushed"

@@ -1,6 +1,6 @@
 ---
 name: add-repo
-description: Use when the user runs /add-repo to register a repository with the shura council, either as a local worktree or a remote clone.
+description: Use when the user runs /add-repo to connect a repository to the shura council.
 ---
 
 # /add-repo — Register a Repository
@@ -68,9 +68,9 @@ git clone <url> <absolute-path-to-project>/repos/<slug>
 ```bash
 git -C <absolute-path-to-project>/repos/<slug> \
   symbolic-ref refs/remotes/origin/HEAD --short 2>/dev/null \
-  | sed 's|origin/||'
+  | sed 's|origin/||' \
+  || echo "main"
 ```
-Fall back to `main` if the command fails.
 
 **Create and switch to project branch:**
 ```bash

@@ -1,6 +1,6 @@
 # Shura State Format
 
-All state lives in `.shura/` relative to the shura project directory created by `/start`.
+All state lives in `.shura/` relative to the shura project directory created by `/init`.
 
 ## Directory Layout
 
@@ -8,7 +8,7 @@ All state lives in `.shura/` relative to the shura project directory created by 
 <project-dir>/
 ├── .shura/
 │   ├── config.json             # Project identity + mission
-│   ├── decisions.md            # SM cross-repo decision log (never committed to git)
+│   ├── decisions.md            # PM cross-repo decision log (never committed to git)
 │   └── repos/
 │       └── <slug>/
 │           ├── config.json     # Per-repo registration

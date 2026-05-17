@@ -1,6 +1,6 @@
 ---
 name: get-manager
-description: Use when the user runs /get-manager to open a conversation with the Program Manager agent, who leads the shura council.
+description: Use when the user runs /get-manager to talk to the Program Manager.
 ---
 
 # /get-manager — Invoke the Program Manager

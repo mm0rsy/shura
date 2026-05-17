@@ -1,6 +1,6 @@
 ---
 name: goal
-description: Use when the user runs /goal to set the project mission and trigger the Program Manager's stakeholder meeting to split work across repos.
+description: Use when the user runs /goal to define what the project should achieve across all repos.
 ---
 
 # /goal — Set the Mission
@@ -40,12 +40,14 @@ Read all `.shura/repos/*/config.json`. Build the formatted repo list (same forma
 
 ## Step 5: Load and fill the Program Manager prompt
 
-Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/program-manager.md`. Replace all `{placeholders}`:
+The shura plugin directory is two levels up from `skills/goal/` — use this path in steps 5 and 8.
+
+Read `agents/program-manager.md`. Replace all `{placeholders}`:
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
 - `{goal}` → the mission just saved
 - `{repo_list}` → formatted repo list from step 4
-- `{decisions_log}` → absolute path to `.shura/decisions.md` (create the file if it does not exist)
+- `{decisions_log}` → absolute path to `.shura/decisions.md`
 
 Append this stakeholder-meeting opener to the filled prompt:
 
@@ -83,7 +85,7 @@ Immediately after saving epics, launch the teams without waiting for user input.
 Announce:
 > "Epics confirmed and saved. Launching all repo teams now..."
 
-Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/eng-manager.md`.
+Read `agents/eng-manager.md` from the plugin directory identified in step 5.
 
 For each repo, fill `agents/eng-manager.md` placeholders:
 - `{repo_name}` → `repo.name`
@@ -94,7 +96,7 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{goal}` → `config.goal`
 - `{epic}` → `repo.epic`
 - `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/goal/`)
-- `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md` (create the file if it does not exist)
+- `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 
 Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message.
 

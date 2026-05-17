@@ -77,11 +77,23 @@ User ─── /get-manager ──► Program Manager (PM)
 - **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts
 - **Escalation chain:** Dev escalates to PO → PO escalates to EM → EM escalates to PM (who convenes a Board)
 
+## Goal Versioning
+
+When you re-run `/goal` on an existing project, shura starts a new goal cycle:
+
+- The current goal is archived to a `goals[]` history in `config.json`
+- The PM derives a short branch slug from the mission text (e.g., `add-oauth2-auth`)
+- Each repo worktree gets a new branch: `<project-name>/<goal-slug>` (created from the latest upstream default)
+- First run keeps the original `<project-name>` branch — no change
+
+This means each goal has its own branch and a clean history. Old work stays on the previous branch.
+
 ## Getting Started
 
 1. `/init` — name your project
-2. `/add-repo` — add each repository
+2. `/add-repo` — add each repository (installs graphify knowledge graph if available)
 3. `/goal` — state the mission; teams launch automatically after the stakeholder meeting
+4. `/status` — check team progress at any time
 
 ## Glossary
 

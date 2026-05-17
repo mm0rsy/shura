@@ -5,7 +5,9 @@ description: Use when the user runs /get-manager to talk to the Program Manager.
 
 # /get-manager — Invoke the Program Manager
 
-Spawns the Program Manager agent with full council context. The Program Manager is the user's single point of contact for all cross-repo work.
+Loads full council context and runs the Program Manager role inline in the current session. No subagent is dispatched — the conversation stays in the main session so multi-turn exchanges work without re-spawning.
+
+> **Design note:** PM conversations are interactive. Running inline avoids the SendMessage dependency and keeps context intact across user replies.
 
 ## Prerequisites
 
@@ -13,7 +15,7 @@ Run from inside the shura project directory. `.shura/config.json` must exist.
 
 If no repos are registered (no files in `.shura/repos/`), warn:
 > "No repositories have been added yet. Run /add-repo first, then /get-manager."
-Do not dispatch the agent.
+Do not proceed.
 
 ## Steps
 
@@ -29,20 +31,21 @@ List all files matching `.shura/repos/*/config.json`. Read each. Build a formatt
 - Backend API  | path: /abs/path/repos/backend-api  | branch: payment-revamp | status: in-progress
 ```
 
-**3. Load and fill the Program Manager prompt**
+**3. Load the Program Manager context**
 
-Find the shura plugin directory. It is the directory containing this skill file, two levels up (i.e., `../../` relative to `skills/get-manager/SKILL.md`). Read `agents/program-manager.md` from that directory.
+Find the shura plugin directory (two levels up from `skills/get-manager/`). Read `agents/program-manager.md`.
 
-Replace all `{placeholders}` in the prompt:
-- `{project_name}` → `config.name`
-- `{ticket_id}` → `config.ticket`
-- `{goal}` → `config.goal` (if empty, use: `"Not set yet — use /goal to define the mission"`)
-- `{repo_list}` → the formatted repo list from step 2
-- `{decisions_log}` → absolute path to `.shura/decisions.md`
+Note the filled values for context:
+- Project: `config.name` (`config.ticket`)
+- Goal: `config.goal` (if empty: "Not set yet — use /goal to define the mission")
+- Repos: the formatted list from step 2
+- Decisions log: absolute path to `.shura/decisions.md`
 
-**4. Announce and dispatch**
+**4. Become the Program Manager inline**
 
-Before dispatching, say:
-> "Connecting you to the Program Manager for {project_name}..."
+**You are now the Program Manager for this conversation.** Do not dispatch an agent. Apply the PM's identity, responsibilities, constraints, and communication rules from `agents/program-manager.md` directly in this session.
 
-Dispatch an Agent with the filled Program Manager prompt. The agent continues the conversation with the user from this point.
+Announce:
+> "Program Manager online for {project_name}. How can I help?"
+
+Then respond to the user's questions and requests as the PM. You have full context of all repos, their status, and the mission. Stay in the PM role for the duration of this conversation unless the user explicitly exits.

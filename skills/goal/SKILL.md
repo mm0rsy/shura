@@ -5,7 +5,9 @@ description: Use when the user runs /goal to define what the project should achi
 
 # /goal — Set the Mission
 
-Records the mission, runs a stakeholder meeting with the Program Manager to confirm epics, then automatically launches all repo teams.
+Records the mission, runs an inline stakeholder meeting (you play the PM role directly — no subagent) to confirm epics, then dispatches all Engineering Manager agents in parallel.
+
+> **Design note:** The stakeholder meeting is interactive and must stay in the main session. Only the EM/PO/Dev agents are dispatched as subagents — they are fire-and-forget workers, not conversational partners.
 
 ## Prerequisites
 
@@ -33,67 +35,48 @@ Update `.shura/config.json`:
 
 ## Step 4: Load council context
 
-Read all `.shura/repos/*/config.json`. Build the formatted repo list (same format as /get-manager):
+Read all `.shura/repos/*/config.json`. Build the formatted repo list:
 ```
 - {name} | path: {path} | branch: {branch} | status: {status}
 ```
 
-## Step 5: Load and fill the Program Manager prompt
+Also read `agents/program-manager.md` from the plugin directory (two levels up from `skills/goal/`) to load the PM's responsibilities, communication rules, and constraints — you will act on these inline, not dispatch an agent.
 
-The shura plugin directory is two levels up from `skills/goal/` — use this path in steps 5 and 8.
+## Step 5: Run the stakeholder meeting inline
 
-Read `agents/program-manager.md`. Replace all `{placeholders}`:
-- `{project_name}` → `config.name`
-- `{ticket_id}` → `config.ticket`
-- `{goal}` → the mission just saved
-- `{repo_list}` → formatted repo list from step 4
-- `{decisions_log}` → absolute path to `.shura/decisions.md`
+**You are now the Program Manager for the rest of this meeting.** Do not dispatch an agent. Conduct the meeting directly in this session using the PM's responsibilities and constraints from `agents/program-manager.md`.
 
-Append this stakeholder-meeting opener to the filled prompt:
-
-```
-## Current Task: Stakeholder Meeting
-
-You have just received the mission from the User (the stakeholder). Run the stakeholder meeting now:
+Run the meeting:
 1. Greet the User and confirm receipt of the mission
 2. Present your initial read: how does the work split across the repos?
 3. For each repo, propose a clear epic and ask the User if it looks right
 4. Adjust epics based on User feedback until all are confirmed
 5. When all epics are confirmed, output this block exactly — one line per repo,
-   using the repo slug (not the display name) from the council list above:
+   using the repo slug (not the display name) from the council list:
 
+```
 EPICS:
 - <repo-slug>: <final confirmed epic text>
 - <repo-slug>: <final confirmed epic text>
 EPICS CONFIRMED.
-
-   Then stop — the system will take it from here.
 ```
 
-## Step 6: Announce and dispatch
+**Resume skill execution after outputting EPICS CONFIRMED.**
 
-Say:
-> "Mission saved. Starting stakeholder meeting — Program Manager is presenting the work breakdown..."
+## Step 6: Save confirmed epics
 
-Dispatch the Agent with the filled + appended prompt.
+Parse the `EPICS:` block line by line. Each line has the form `- <slug>: <epic text>`. Match each slug to the corresponding `.shura/repos/<slug>/config.json` and set its `epic` field to the epic text.
 
-## Step 7: Save confirmed epics
+If a slug in the block does not match any registered repo, warn and ask the user to clarify before proceeding to Step 7.
 
-After the Program Manager outputs the `EPICS:` block followed by "EPICS CONFIRMED", parse
-the block line by line. Each line has the form `- <slug>: <epic text>`. Match each slug to
-the corresponding `.shura/repos/<slug>/config.json` and set its `epic` field to the epic text.
-
-If a slug in the block does not match any registered repo, warn and ask the user to clarify
-before proceeding to Step 8.
-
-## Step 8: Auto-launch all repo teams
+## Step 7: Auto-launch all repo teams
 
 Immediately after saving epics, launch the teams without waiting for user input.
 
 Announce:
 > "Epics confirmed and saved. Launching all repo teams now..."
 
-Read `agents/eng-manager.md` from the plugin directory identified in step 5.
+Read `agents/eng-manager.md` from the plugin directory identified in step 4.
 
 For each repo, fill `agents/eng-manager.md` placeholders:
 - `{repo_name}` → `repo.name`
@@ -103,7 +86,7 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{branch}` → `repo.branch`
 - `{goal}` → `config.goal`
 - `{epic}` → `repo.epic`
-- `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/goal/`)
+- `{plugin_dir}` → absolute path to the shura plugin directory
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 
 Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message.
@@ -118,7 +101,7 @@ Each team is running independently:
   Engineering Manager → spawns PO → PO spawns Dev(s)
 
 Use /get-manager to talk to the Program Manager and track progress.
-When teams complete, they will push their branches and notify the Program Manager.
+When teams complete, they will push their branches and notify you directly.
 ```
 
 ## Notes

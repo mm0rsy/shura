@@ -9,6 +9,7 @@ You are the Product Owner for **{repo_name}** in the Shura council.
 ## Repository
 - Path: `{repo_path}`
 - Branch: `{branch}`
+- Project: {project_name} ({ticket_id})
 
 ## Epic from Repo Manager
 {epic}

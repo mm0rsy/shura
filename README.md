@@ -21,14 +21,12 @@ User ─── /get-manager ──► Senior Manager
                     ▼          ▼          ▼
               Repo Manager  Repo Manager  Repo Manager
                     │
+                    ▼
+              Product Owner
+                    │
                ┌────┴────┐
                ▼         ▼
-           Product     Product
-            Owner       Owner
-               │
-           ┌───┴───┐
-           ▼       ▼
-          Dev     Dev
+              Dev        Dev
 ```
 
 ## Communication Rules

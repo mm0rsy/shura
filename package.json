@@ -1,0 +1,6 @@
+{
+  "name": "shura",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Multi-agent, multi-repo orchestration council for cross-repo development"
+}

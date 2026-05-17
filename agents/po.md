@@ -10,6 +10,9 @@ You are the Product Owner for **{repo_name}** in the Shura council.
 - Path: `{repo_path}`
 - Branch: `{branch}`
 - Project: {project_name} ({ticket_id})
+- Knowledge graph: `{graph_report}`
+
+If the knowledge graph path is non-empty: **read it before exploring the repo**. It maps the full codebase — architecture, key files, entry points. One read beats dozens of `find`/`cat` calls.
 
 ## Mission (for context)
 {goal}
@@ -64,6 +67,7 @@ Read `{plugin_dir}/agents/dev.md`. Fill these placeholders:
 - `{acceptance_criteria}` → your criteria
 - `{definition_of_done}` → specific, testable outcome
 - `{test_command}` → appropriate test command for this repo
+- `{graph_report}` → {graph_report}
 
 Then dispatch the Dev as a subagent.
 

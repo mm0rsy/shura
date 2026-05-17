@@ -57,7 +57,8 @@ Fields:
   "path": "/home/user/projects/payment-revamp/repos/frontend",
   "branch": "payment-revamp",
   "status": "ready",
-  "epic": ""
+  "epic": "",
+  "graph_report": "/home/user/projects/payment-revamp/repos/frontend/graphify-out/GRAPH_REPORT.md"
 }
 ```
 
@@ -70,6 +71,7 @@ Fields:
 - `branch` — branch name; first goal run: `<project-name>`; subsequent runs: `<project-name>/<branch_suffix>`
 - `status` — one of: `ready` | `in-progress` | `complete` | `blocked`
 - `epic` — assigned epic from Program Manager (set during `/goal`)
+- `graph_report` — absolute path to `graphify-out/GRAPH_REPORT.md` inside the repo; empty string if graphify was not run
 
 ## Decision Log Format
 

@@ -8,16 +8,27 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 claude plugin install https://github.com/mm0rsy/shura
 ```
 
-Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, `/init`, `/add-repo`, `/goal`, `/get-manager`, and `/recover` commands are available in any Claude Code session.
+Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, `/init`, `/add-repo`, `/goal`, `/get-manager`, `/status`, and `/recover` commands are available in any Claude Code session.
+
+### Optional: graphify (recommended)
+
+[graphify](https://github.com/safishamsi/graphify) builds a knowledge graph of each repo so agents can understand the codebase in one read instead of exploring blind. Install before running `/add-repo`:
+
+```bash
+uv tool install graphifyy && graphify install
+```
+
+Without graphify, agents still work — they just explore the codebase manually.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
 | `/init` | Initialize a shura project directory |
-| `/add-repo` | Add a repo to the council (local worktree or remote clone); branch is named after the project automatically |
+| `/add-repo` | Add a repo to the council (local worktree or remote clone); auto-indexes with graphify if installed |
 | `/goal` | Set the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Talk to the Program Manager at any time |
+| `/status` | Live dashboard — see every repo team's status and recent decisions |
 | `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
 ## Team Templates

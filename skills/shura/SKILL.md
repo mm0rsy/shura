@@ -12,9 +12,10 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 | Command | When to use |
 |---------|-------------|
 | `/init` | First step — create the project directory |
-| `/add-repo` | Add each repository (local worktree or remote clone); branch is named after the project automatically |
+| `/add-repo` | Add each repository (local worktree or remote clone); auto-indexes with graphify if installed |
 | `/goal` | State the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Open a conversation with the Program Manager at any time |
+| `/status` | Live dashboard — see every repo team's status and recent decisions |
 | `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
 ## Typical Flow
@@ -23,7 +24,7 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 /init → /add-repo (×N) → /goal → [teams auto-launch]
 ```
 
-After teams launch, use `/get-manager` to check in. The Program Manager handles everything else.
+After teams launch, use `/get-manager` to check in and `/status` to see team progress at a glance. The Program Manager handles everything else.
 
 ## Agent Hierarchy
 

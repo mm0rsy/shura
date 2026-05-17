@@ -9,17 +9,17 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 | `/init` | Initialize a shura project directory |
 | `/add-repo` | Add a repo to the council (local worktree or remote clone) |
 | `/goal` | Set the mission; stakeholder meeting with SM; auto-launches teams |
-| `/get-manager` | Talk to the Senior Manager at any time |
+| `/get-manager` | Talk to the Program Manager at any time |
 | `/start` | Manually re-launch teams (recovery — normally auto-triggered by /goal) |
 
 ## Agent Hierarchy
 
 ```
-User ─── /get-manager ──► Senior Manager
+User ─── /get-manager ──► Program Manager
                                │
                     ┌──────────┼──────────┐
                     ▼          ▼          ▼
-              Repo Manager  Repo Manager  Repo Manager
+              Engineering Manager  Engineering Manager  Engineering Manager
                     │
                     ▼
               Product Owner
@@ -31,11 +31,11 @@ User ─── /get-manager ──► Senior Manager
 
 ## Communication Rules
 
-- **User ↔ Senior Manager** — only touch point for the user
-- **Senior Manager ↔ Repo Managers** — bidirectional, runs "board meetings"
-- **Repo Manager → PO** — assigns epics downward only
+- **User ↔ Program Manager** — only touch point for the user
+- **Program Manager ↔ Engineering Managers** — bidirectional, runs "board meetings"
+- **Engineering Manager → PO** — assigns epics downward only
 - **PO → Devs** — assigns tasks; can spawn additional Devs for parallelism
-- **Escalation path:** Dev → PO → Repo Manager → Board (all managers + SM)
+- **Escalation path:** Dev → PO → Engineering Manager → Board (all EMs + PM)
 
 ## Getting Started
 

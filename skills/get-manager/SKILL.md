@@ -1,11 +1,11 @@
 ---
 name: get-manager
-description: Use when the user runs /get-manager to open a conversation with the Senior Manager agent, who leads the shura council.
+description: Use when the user runs /get-manager to open a conversation with the Program Manager agent, who leads the shura council.
 ---
 
-# /get-manager — Invoke the Senior Manager
+# /get-manager — Invoke the Program Manager
 
-Spawns the Senior Manager agent with full council context. The Senior Manager is the user's single point of contact for all cross-repo work.
+Spawns the Program Manager agent with full council context. The Program Manager is the user's single point of contact for all cross-repo work.
 
 ## Prerequisites
 
@@ -29,9 +29,9 @@ List all files matching `.shura/repos/*/config.json`. Read each. Build a formatt
 - Backend API  | path: /abs/path/repos/backend-api  | branch: payment-revamp | status: in-progress
 ```
 
-**3. Load and fill the Senior Manager prompt**
+**3. Load and fill the Program Manager prompt**
 
-Find the shura plugin directory. It is the directory containing this skill file, two levels up (i.e., `../../` relative to `skills/get-manager/SKILL.md`). Read `agents/senior-manager.md` from that directory.
+Find the shura plugin directory. It is the directory containing this skill file, two levels up (i.e., `../../` relative to `skills/get-manager/SKILL.md`). Read `agents/program-manager.md` from that directory.
 
 Replace all `{placeholders}` in the prompt:
 - `{project_name}` → `config.name`
@@ -43,6 +43,6 @@ Replace all `{placeholders}` in the prompt:
 **4. Announce and dispatch**
 
 Before dispatching, say:
-> "Connecting you to the Senior Manager for {project_name}..."
+> "Connecting you to the Program Manager for {project_name}..."
 
-Dispatch an Agent with the filled Senior Manager prompt. The agent continues the conversation with the user from this point.
+Dispatch an Agent with the filled Program Manager prompt. The agent continues the conversation with the user from this point.

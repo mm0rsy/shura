@@ -1,11 +1,11 @@
 ---
 name: goal
-description: Use when the user runs /goal to set the project mission and trigger the Senior Manager's stakeholder meeting to split work across repos.
+description: Use when the user runs /goal to set the project mission and trigger the Program Manager's stakeholder meeting to split work across repos.
 ---
 
 # /goal — Set the Mission
 
-Records the mission, runs a stakeholder meeting with the Senior Manager to confirm epics, then automatically launches all repo teams.
+Records the mission, runs a stakeholder meeting with the Program Manager to confirm epics, then automatically launches all repo teams.
 
 ## Prerequisites
 
@@ -38,9 +38,9 @@ Read all `.shura/repos/*/config.json`. Build the formatted repo list (same forma
 - {name} | path: {path} | branch: {branch} | status: {status}
 ```
 
-## Step 5: Load and fill the Senior Manager prompt
+## Step 5: Load and fill the Program Manager prompt
 
-Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/senior-manager.md`. Replace all `{placeholders}`:
+Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/program-manager.md`. Replace all `{placeholders}`:
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
 - `{goal}` → the mission just saved
@@ -65,13 +65,13 @@ You have just received the mission from the User (the stakeholder). Run the stak
 ## Step 6: Announce and dispatch
 
 Say:
-> "Mission saved. Starting stakeholder meeting — Senior Manager is presenting the work breakdown..."
+> "Mission saved. Starting stakeholder meeting — Program Manager is presenting the work breakdown..."
 
 Dispatch the Agent with the filled + appended prompt.
 
 ## Step 7: Save confirmed epics
 
-After the Senior Manager says "EPICS CONFIRMED", the skill (not the agent) saves each confirmed epic.
+After the Program Manager says "EPICS CONFIRMED", the skill (not the agent) saves each confirmed epic.
 
 For each repo, update `.shura/repos/<slug>/config.json`:
 - Set `epic` to the confirmed epic text for that repo
@@ -83,9 +83,9 @@ Immediately after saving epics, launch the teams without waiting for user input.
 Announce:
 > "Epics confirmed and saved. Launching all repo teams now..."
 
-Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/repo-manager.md`.
+Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/eng-manager.md`.
 
-For each repo, fill `agents/repo-manager.md` placeholders:
+For each repo, fill `agents/eng-manager.md` placeholders:
 - `{repo_name}` → `repo.name`
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
@@ -96,7 +96,7 @@ For each repo, fill `agents/repo-manager.md` placeholders:
 - `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/goal/`)
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md` (create the file if it does not exist)
 
-Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message.
+Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message.
 
 Update `.shura/config.json`: set `status` to `"running"`.
 
@@ -105,10 +105,10 @@ Confirm:
 ✓ All {N} teams launched.
 
 Each team is running independently:
-  Repo Manager → spawns PO → PO spawns Dev(s)
+  Engineering Manager → spawns PO → PO spawns Dev(s)
 
-Use /get-manager to talk to the Senior Manager and track progress.
-When teams complete, they will push their branches and notify the Senior Manager.
+Use /get-manager to talk to the Program Manager and track progress.
+When teams complete, they will push their branches and notify the Program Manager.
 ```
 
 ## Notes

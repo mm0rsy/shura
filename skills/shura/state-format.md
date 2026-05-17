@@ -59,14 +59,14 @@ Fields:
 - `path` — absolute path to repo working tree inside the project
 - `branch` — branch name (always equals the project `name`)
 - `status` — one of: `ready` | `in-progress` | `complete` | `blocked`
-- `epic` — assigned epic from Senior Manager (set during `/goal`)
+- `epic` — assigned epic from Program Manager (set during `/goal`)
 
 ## Decision Log Format
 
 Decision logs are append-only markdown files stored inside `.shura/`. They are **never committed to any git repository** — they exist solely for agent context and failure recovery.
 
-- **`.shura/decisions.md`** — cross-repo decisions by the Senior Manager
-- **`.shura/repos/<slug>/decisions.md`** — decisions by the Repo Manager, PO, and Dev for that repo
+- **`.shura/decisions.md`** — cross-repo decisions by the Program Manager
+- **`.shura/repos/<slug>/decisions.md`** — decisions by the Engineering Manager, PO, and Dev for that repo
 
 ### Entry format
 

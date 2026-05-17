@@ -28,9 +28,9 @@ List and read all `.shura/repos/*/config.json`. Only proceed for repos where `ep
 **2. Load all agent prompt templates**
 
 Find the shura plugin directory (two levels up from `skills/start/`). Read:
-- `agents/repo-manager.md`
+- `agents/eng-manager.md`
 
-(The Repo Manager will read `agents/po.md` itself when spawning the PO; the PO will read `agents/dev.md` itself when spawning Devs.)
+(The Engineering Manager will read `agents/po.md` itself when spawning the PO; the PO will read `agents/dev.md` itself when spawning Devs.)
 
 **3. Announce launch**
 
@@ -43,9 +43,9 @@ Repositories: {N} repos
 Starting all teams simultaneously...
 ```
 
-**4. Dispatch all Repo Manager agents in parallel**
+**4. Dispatch all Engineering Manager agents in parallel**
 
-For each repo, fill `agents/repo-manager.md` placeholders:
+For each repo, fill `agents/eng-manager.md` placeholders:
 - `{repo_name}` → `repo.name`
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
@@ -56,7 +56,7 @@ For each repo, fill `agents/repo-manager.md` placeholders:
 - `{plugin_dir}` → absolute path to the shura plugin directory (the directory containing this skills/start/SKILL.md, two levels up)
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 
-Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
+Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
 
 **5. Update project status**
 
@@ -68,15 +68,15 @@ Update `.shura/config.json`: set `status` to `"running"`.
 ✓ All {N} teams launched.
 
 Each team is running:
-  Repo Manager → will spawn PO → PO will spawn Dev(s)
+  Engineering Manager → will spawn PO → PO will spawn Dev(s)
 
-Use /get-manager to talk to the Senior Manager and track overall progress.
-When teams complete, they will push their branches and notify the Senior Manager.
+Use /get-manager to talk to the Program Manager and track overall progress.
+When teams complete, they will push their branches and notify the Program Manager.
 ```
 
 ## After Teams Complete
 
-Each Repo Manager pushes its branch and notifies the Senior Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
+Each Engineering Manager pushes its branch and notifies the Program Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
 
 ## Re-running /start
 

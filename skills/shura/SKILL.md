@@ -5,7 +5,7 @@ description: Use when the user asks about shura commands, needs a command overvi
 
 # Shura — The Consultative Council
 
-Multi-agent orchestration for cross-repository development. Each repository gets its own team (Manager + PO + Dev). A Senior Manager coordinates all teams toward a shared mission.
+Multi-agent orchestration for cross-repository development. Each repository gets its own team (Manager + PO + Dev). A Program Manager coordinates all teams toward a shared mission.
 
 ## Commands
 
@@ -13,8 +13,8 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 |---------|-------------|
 | `/init` | First step — create the project directory |
 | `/add-repo` | Add each repository (local worktree or remote clone) |
-| `/goal` | State the mission; stakeholder meeting with SM; auto-launches teams |
-| `/get-manager` | Open a conversation with the Senior Manager at any time |
+| `/goal` | State the mission; stakeholder meeting with PM; auto-launches teams |
+| `/get-manager` | Open a conversation with the Program Manager at any time |
 | `/start` | Manually re-launch teams (recovery path — normally auto-triggered by /goal) |
 
 ## Typical Flow
@@ -23,17 +23,17 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 /init → /add-repo (×N) → /goal → [teams auto-launch]
 ```
 
-After teams launch, use `/get-manager` to check in. The Senior Manager handles everything else.
+After teams launch, use `/get-manager` to check in. The Program Manager handles everything else.
 
 ## Agent Hierarchy
 
 ```
 User
- └─ Senior Manager           (/get-manager)
-      ├─ Repo Manager A      (/init — one per repo)
+ └─ Program Manager           (/get-manager)
+      ├─ Engineering Manager A      (/init — one per repo)
       │    └─ Product Owner A
       │         └─ Dev A1, Dev A2 (PO can spawn more)
-      ├─ Repo Manager B
+      ├─ Engineering Manager B
       │    └─ Product Owner B
       │         └─ Dev B1
       └─ ...
@@ -41,11 +41,11 @@ User
 
 ## Communication Rules
 
-- **User speaks only to Senior Manager**
-- **Senior Manager ↔ Repo Managers** — bidirectional; SM runs board meetings
-- **Repo Manager → PO** — assigns epics downward; PO escalates up
+- **User speaks only to Program Manager**
+- **Program Manager ↔ Engineering Managers** — bidirectional; PM runs board meetings
+- **Engineering Manager → PO** — assigns epics downward; PO escalates up
 - **PO → Dev** — assigns tasks; Dev escalates up if blocked
-- **Board meeting** — triggered when any Repo Manager escalates; all managers + SM attend
+- **Board meeting** — triggered when any Engineering Manager escalates; all EMs + PM attend
 
 ## State
 

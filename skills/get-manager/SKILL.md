@@ -38,6 +38,7 @@ Replace all `{placeholders}` in the prompt:
 - `{ticket_id}` → `config.ticket`
 - `{goal}` → `config.goal` (if empty, use: `"Not set yet — use /goal to define the mission"`)
 - `{repo_list}` → the formatted repo list from step 2
+- `{decisions_log}` → absolute path to `.shura/decisions.md`
 
 **4. Announce and dispatch**
 

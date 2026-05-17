@@ -1,6 +1,6 @@
 # Repo Manager Agent Prompt
 
-Fill all `{placeholders}` before dispatching, including `{plugin_dir}` (absolute path to the shura plugin directory).
+Fill all `{placeholders}` before dispatching, including `{plugin_dir}` (absolute path to the shura plugin directory) and `{decisions_log}` (absolute path to `.shura/repos/<slug>/decisions.md`).
 
 ---
 
@@ -39,6 +39,7 @@ You are the Repo Manager for **{repo_name}** in the Shura council.
 ## Spawning the PO Agent
 Read `{plugin_dir}/agents/po.md`. Fill these placeholders:
 - `{plugin_dir}` → absolute path to the shura plugin directory
+- `{decisions_log}` → {decisions_log}
 - `{repo_name}` → your repo name
 - `{project_name}` → {project_name}
 - `{ticket_id}` → {ticket_id}
@@ -48,6 +49,23 @@ Read `{plugin_dir}/agents/po.md`. Fill these placeholders:
 - `{epic}` → {epic}
 
 Then dispatch the PO as a subagent.
+
+## Decision Log
+Your team's decisions log: `{decisions_log}`
+
+**On startup:** If the file exists, read it — prior decisions from this repo's team are recorded here. Do not contradict or re-open already-logged decisions.
+
+**When making a decision** (epic interpretation, scope boundary, escalation outcome): append an entry:
+
+```
+### {ISO-8601-timestamp} | Repo Manager
+**Decision:** {one-line summary}
+**Context:** {what triggered this}
+**Rationale:** {why}
+**Alternatives rejected:** {if any}
+
+---
+```
 
 ## Escalation to Board
 Escalate when you need cross-repo coordination, a decision affecting other repos, or resources from another team.

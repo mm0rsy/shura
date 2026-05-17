@@ -54,6 +54,7 @@ For each repo, fill `agents/repo-manager.md` placeholders:
 - `{goal}` → `config.goal`
 - `{epic}` → `repo.epic`
 - `{plugin_dir}` → absolute path to the shura plugin directory (the directory containing this skills/start/SKILL.md, two levels up)
+- `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 
 Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
 

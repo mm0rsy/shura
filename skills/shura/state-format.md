@@ -8,9 +8,11 @@ All state lives in `.shura/` relative to the shura project directory created by 
 <project-dir>/
 ├── .shura/
 │   ├── config.json             # Project identity + mission
+│   ├── decisions.md            # SM cross-repo decision log (never committed to git)
 │   └── repos/
 │       └── <slug>/
-│           └── config.json     # Per-repo registration
+│           ├── config.json     # Per-repo registration
+│           └── decisions.md    # Repo team decision log (never committed to git)
 └── repos/
     └── <slug>/                 # Repo worktree or clone (actual code)
 ```
@@ -58,6 +60,42 @@ Fields:
 - `branch` — branch name (always equals the project `name`)
 - `status` — one of: `ready` | `in-progress` | `complete` | `blocked`
 - `epic` — assigned epic from Senior Manager (set during `/goal`)
+
+## Decision Log Format
+
+Decision logs are append-only markdown files stored inside `.shura/`. They are **never committed to any git repository** — they exist solely for agent context and failure recovery.
+
+- **`.shura/decisions.md`** — cross-repo decisions by the Senior Manager
+- **`.shura/repos/<slug>/decisions.md`** — decisions by the Repo Manager, PO, and Dev for that repo
+
+### Entry format
+
+```markdown
+### {ISO-8601-timestamp} | {Role}
+**Decision:** {what was decided — one line}
+**Context:** {what situation triggered this decision}
+**Rationale:** {why this option over the alternatives}
+**Alternatives rejected:** {other options and why they were not chosen}
+
+---
+```
+
+Omit "Alternatives rejected" when no meaningful alternatives existed.
+
+### What to log
+
+Log any decision where:
+- One technical approach is chosen over another
+- A scope boundary is set (what's in/out of this epic or task)
+- A workaround is applied for a discovered constraint
+- An ambiguity in requirements is resolved
+- An epic or task definition changes mid-execution
+
+Do **not** log routine implementation steps — only choices with real alternatives.
+
+### Recovery use
+
+When an agent is re-spawned after failure, it reads the decision log before acting. This prevents re-opening closed decisions and contradicting prior choices.
 
 ## Slug Derivation
 

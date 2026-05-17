@@ -45,6 +45,7 @@ Find the shura plugin directory (two levels up from `skills/goal/`). Read `agent
 - `{ticket_id}` → `config.ticket`
 - `{goal}` → the mission just saved
 - `{repo_list}` → formatted repo list from step 4
+- `{decisions_log}` → absolute path to `.shura/decisions.md` (create the file if it does not exist)
 
 Append this stakeholder-meeting opener to the filled prompt:
 
@@ -93,6 +94,7 @@ For each repo, fill `agents/repo-manager.md` placeholders:
 - `{goal}` → `config.goal`
 - `{epic}` → `repo.epic`
 - `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/goal/`)
+- `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md` (create the file if it does not exist)
 
 Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message.
 

@@ -55,9 +55,11 @@ export async function detectStack(repoPath) {
     const hasPkg = await exists(pkgPath);
     const frontendFrameworks = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt'];
 
+    let pkg = null;
+    let allDeps = {};
     if (hasPkg) {
-      const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
-      const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+      pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
+      allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
       const hasFrontendDep = frontendFrameworks.some(fw => allDeps[fw] !== undefined || Object.keys(allDeps).some(dep => dep.startsWith(fw + '/')));
 
       if (hasFrontendDep) {
@@ -72,8 +74,6 @@ export async function detectStack(repoPath) {
 
     // 6. frontend: package.json with any frontend framework dep
     if (hasPkg) {
-      const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
-      const allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
       const frontendAll = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt', 'gatsby'];
       const hasFrontendDep = frontendAll.some(fw => allDeps[fw] !== undefined || Object.keys(allDeps).some(dep => dep.startsWith(fw + '/')));
       if (hasFrontendDep) {

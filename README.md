@@ -20,6 +20,24 @@ Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, 
 | `/get-manager` | Talk to the Program Manager at any time |
 | `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
+## Team Templates
+
+When `/add-repo` is called, Shura auto-detects the repository's tech stack and loads the matching team template. The detection logic lives in `skills/add-repo/stack-detector.js`. Templates live in `agents/templates/<stack-type>.md`.
+
+Each template defines the mandatory roles that are always spawned for that stack, plus optional roles available for specialized work.
+
+| Stack | Mandatory Roles |
+|-------|----------------|
+| frontend | Engineering Manager, Product Owner, Frontend Developer |
+| backend | Engineering Manager, Product Owner, Backend Developer |
+| mobile | Engineering Manager, Product Owner, Mobile Developer |
+| fullstack | Engineering Manager, Product Owner, Full-Stack Developer |
+| devops | Engineering Manager, Product Owner, DevOps Engineer |
+| data-ml | Engineering Manager, Product Owner, ML Engineer |
+| python | Engineering Manager, Product Owner, Python Developer |
+| cpp | Engineering Manager, Product Owner, C++ Developer |
+| claude-code-plugin | Engineering Manager, Product Owner, JS/ESM Developer, Prompt Engineer |
+
 ## Agent Hierarchy
 
 ```

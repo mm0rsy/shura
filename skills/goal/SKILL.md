@@ -1,11 +1,11 @@
 ---
 name: goal
-description: Use when the user runs /goal to set the project mission and trigger the Senior Manager's department meeting to split work across repos.
+description: Use when the user runs /goal to set the project mission and trigger the Senior Manager's stakeholder meeting to split work across repos.
 ---
 
 # /goal — Set the Mission
 
-Records the mission in `.shura/config.json` and kicks off the Senior Manager's department meeting to split work across repos as epics.
+Records the mission, runs a stakeholder meeting with the Senior Manager to confirm epics, then automatically launches all repo teams.
 
 ## Prerequisites
 
@@ -46,25 +46,25 @@ Find the shura plugin directory (two levels up from `skills/goal/`). Read `agent
 - `{goal}` → the mission just saved
 - `{repo_list}` → formatted repo list from step 4
 
-Append this department-meeting opener to the filled prompt:
+Append this stakeholder-meeting opener to the filled prompt:
 
 ```
-## Current Task: Department Meeting
+## Current Task: Stakeholder Meeting
 
-You have just received the mission. Run the department meeting now:
+You have just received the mission from the User (the stakeholder). Run the stakeholder meeting now:
 1. Greet the User and confirm receipt of the mission
 2. Present your initial read: how does the work split across the repos?
 3. For each repo, propose a clear epic and ask the User if it looks right
 4. Adjust epics based on User feedback until all are confirmed
 5. When all epics are confirmed, say exactly:
-   "EPICS CONFIRMED. Please run /start to launch the teams."
-   Then stop and wait.
+   "EPICS CONFIRMED."
+   Then stop — the system will take it from here.
 ```
 
 ## Step 6: Announce and dispatch
 
 Say:
-> "Mission saved. Starting department meeting — Senior Manager is splitting the work..."
+> "Mission saved. Starting stakeholder meeting — Senior Manager is presenting the work breakdown..."
 
 Dispatch the Agent with the filled + appended prompt.
 
@@ -75,11 +75,42 @@ After the Senior Manager says "EPICS CONFIRMED", the skill (not the agent) saves
 For each repo, update `.shura/repos/<slug>/config.json`:
 - Set `epic` to the confirmed epic text for that repo
 
-Confirm to the user:
-> "Epics saved. Run /start to spin up the repo teams."
+## Step 8: Auto-launch all repo teams
+
+Immediately after saving epics, launch the teams without waiting for user input.
+
+Announce:
+> "Epics confirmed and saved. Launching all repo teams now..."
+
+Find the shura plugin directory (two levels up from `skills/goal/`). Read `agents/repo-manager.md`.
+
+For each repo, fill `agents/repo-manager.md` placeholders:
+- `{repo_name}` → `repo.name`
+- `{project_name}` → `config.name`
+- `{ticket_id}` → `config.ticket`
+- `{repo_path}` → `repo.path`
+- `{branch}` → `repo.branch`
+- `{goal}` → `config.goal`
+- `{epic}` → `repo.epic`
+- `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/goal/`)
+
+Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message.
+
+Update `.shura/config.json`: set `status` to `"running"`.
+
+Confirm:
+```
+✓ All {N} teams launched.
+
+Each team is running independently:
+  Repo Manager → spawns PO → PO spawns Dev(s)
+
+Use /get-manager to talk to the Senior Manager and track progress.
+When teams complete, they will push their branches and notify the Senior Manager.
+```
 
 ## Notes
 
-- The SM agent must reach "EPICS CONFIRMED" before /start can proceed
+- `/start` is available to re-launch teams manually (e.g. after a failure)
 - If the user wants to revise epics later, they can re-run /goal (overwrite confirmation in step 1)
 - The `{test_command}` for each repo is not known at this stage — Devs will determine it when they explore their repos

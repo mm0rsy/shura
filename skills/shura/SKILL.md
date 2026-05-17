@@ -13,17 +13,17 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 |---------|-------------|
 | `/init` | First step — create the project directory |
 | `/add-repo` | Add each repository (local worktree or remote clone) |
-| `/goal` | State the mission; Senior Manager splits work across repos |
-| `/start` | Spawn all repo teams and begin execution |
+| `/goal` | State the mission; stakeholder meeting with SM; auto-launches teams |
 | `/get-manager` | Open a conversation with the Senior Manager at any time |
+| `/start` | Manually re-launch teams (recovery path — normally auto-triggered by /goal) |
 
 ## Typical Flow
 
 ```
-/init → /add-repo (×N) → /goal → /start
+/init → /add-repo (×N) → /goal → [teams auto-launch]
 ```
 
-After `/start`, use `/get-manager` to check in. The Senior Manager handles everything else.
+After teams launch, use `/get-manager` to check in. The Senior Manager handles everything else.
 
 ## Agent Hierarchy
 

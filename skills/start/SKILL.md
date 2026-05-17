@@ -1,11 +1,13 @@
 ---
 name: start
-description: Use when the user runs /start to spin up per-repo agent teams (Repo Manager + PO + Dev) and begin parallel execution across all registered repositories.
+description: Use when the user runs /start to manually launch or re-launch the repo agent teams, bypassing the /goal stakeholder meeting (e.g. after a failure or when epics are already set).
 ---
 
 # /start — Launch the Council Teams
 
-Spins up one team per repo, all running in parallel. Each Repo Manager self-organizes its own PO and Dev(s). Use /get-manager to check in after launching.
+Manually launches one team per repo, all running in parallel. This is the recovery path — normally teams are launched automatically at the end of /goal. Use /start when re-launching after a failure or when epics are already confirmed.
+
+> **Note:** In the normal flow, teams launch automatically after the stakeholder meeting in /goal. /start is for manual control only.
 
 ## Prerequisites
 

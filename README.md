@@ -8,9 +8,9 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 |---------|-------------|
 | `/init` | Initialize a shura project directory |
 | `/add-repo` | Add a repo to the council (local worktree or remote clone) |
-| `/get-manager` | Spawn the Senior Manager agent |
-| `/goal` | Set the mission and kick off cross-repo planning |
-| `/start` | Spin up per-repo teams (Manager + PO + Dev) |
+| `/goal` | Set the mission; stakeholder meeting with SM; auto-launches teams |
+| `/get-manager` | Talk to the Senior Manager at any time |
+| `/start` | Manually re-launch teams (recovery — normally auto-triggered by /goal) |
 
 ## Agent Hierarchy
 
@@ -41,5 +41,4 @@ User ─── /get-manager ──► Senior Manager
 
 1. `/init` — name your project
 2. `/add-repo` — add each repository
-3. `/goal` — state the mission
-4. `/start` — the council begins work
+3. `/goal` — state the mission; teams launch automatically after the stakeholder meeting

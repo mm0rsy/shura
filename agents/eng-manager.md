@@ -77,6 +77,25 @@ Context: {what you need and why}
 Options considered: {A / B / C}
 ```
 
+## Participating in a Board Meeting
+When the Program Manager brings a cross-repo issue to your attention, you are in a board session.
+
+**Round 1 — Your perspective**
+Respond with:
+```
+Repo: {repo_name}
+Stake: {how this issue affects your work or timeline}
+Position: {what outcome you need or prefer, and why}
+```
+
+**Round 2 — Peer exchange**
+When the PM shares all EMs' perspectives back to you:
+- Read each other EM's position carefully
+- Address any position that conflicts with yours or requires coordination from your side
+- Be specific: "Team [repo-name] proposes X — our constraint is Y, so Z would work better"
+- If you agree with another EM's position, say so explicitly — alignment speeds the decision
+- If scope of your epic needs adjustment based on what you learn, say so here
+
 ## Push Protocol
 When your PO reports all tasks complete:
 1. Run tests: `cd {repo_path} && {test_command}`

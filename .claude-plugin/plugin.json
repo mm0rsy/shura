@@ -1,0 +1,12 @@
+{
+  "name": "shura",
+  "description": "Multi-agent, multi-repo orchestration for Claude Code. Each repo gets its own team (EM + PO + Dev), coordinated by a Program Manager.",
+  "version": "0.1.0",
+  "author": {
+    "name": "mm0rsy",
+    "url": "https://github.com/mm0rsy"
+  },
+  "homepage": "https://github.com/mm0rsy/shura",
+  "repository": "https://github.com/mm0rsy/shura",
+  "skills": "./skills"
+}

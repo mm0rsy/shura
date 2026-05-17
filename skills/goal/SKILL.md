@@ -19,7 +19,7 @@ Read `.shura/config.json`. If `goal` is non-empty, display it:
 > "Current goal: {existing-goal}
 > Do you want to replace it?"
 
-Wait for confirmation. If the user says no, abort. If yes, continue.
+Wait for confirmation. If the user says no, abort. If yes, note that this is a **re-run** — the old goal will be archived and a new versioned branch will be created. Continue to Step 2.
 
 ## Step 2: Capture the mission
 
@@ -30,8 +30,17 @@ Accept multi-line input. Capture the full text as the mission statement.
 ## Step 3: Save the goal
 
 Update `.shura/config.json`:
-- Set `goal` to the captured mission text
-- Set `status` to `"goal-set"` (do not change if status is already `"running"` or `"complete"`)
+
+**If this is a re-run** (goal was non-empty before Step 2):
+  - Append the old goal to the `goals` array (initialize to `[]` if missing):
+    ```json
+    { "goal": "<old goal text>", "branch_suffix": "<old branch_suffix or project name>", "archived_at": "<ISO 8601 now>" }
+    ```
+  - Read `branch_suffix` from config to fill `archived_at` entry; if missing, use the project `name` as the suffix.
+
+Set `goal` to the new mission text.
+Set `branch_suffix` to `""` (will be filled after PM outputs the EPICS block in Step 6).
+Set `status` to `"goal-set"` (do not change if status is already `"running"` or `"complete"`).
 
 ## Step 4: Load council context
 
@@ -58,16 +67,53 @@ Run the meeting:
 EPICS:
 - <repo-slug>: <final confirmed epic text>
 - <repo-slug>: <final confirmed epic text>
+BRANCH: <goal-slug>
 EPICS CONFIRMED.
 ```
 
+`BRANCH:` is a URL-safe slug you derive from the mission text (3–5 meaningful words, lowercase, hyphens). Example: `add-oauth2-auth`. The system uses this to name versioned branches.
+
 **Resume skill execution after outputting EPICS CONFIRMED.**
 
-## Step 6: Save confirmed epics
+## Step 6: Save confirmed epics and create versioned branches
 
-Parse the `EPICS:` block line by line. Each line has the form `- <slug>: <epic text>`. Match each slug to the corresponding `.shura/repos/<slug>/config.json` and set its `epic` field to the epic text.
+**Parse the EPICS block:**
 
-If a slug in the block does not match any registered repo, warn and ask the user to clarify before proceeding to Step 7.
+1. Read epic lines (`- <slug>: <epic text>`). Match each slug to `.shura/repos/<slug>/config.json` and set its `epic` field.
+2. Read the `BRANCH: <slug>` line. This is the goal slug derived by the PM.
+
+If a slug in the epic lines does not match any registered repo, warn and ask the user to clarify before proceeding to Step 7.
+
+**Determine the branch name for this goal:**
+
+- `is_rerun` = `goals` array was non-empty before archiving in Step 3 (i.e., this is not the first `/goal` run)
+- If `is_rerun`: `new_branch = "<project-name>/<goal-slug>"` (e.g., `payment-revamp/add-oauth2-auth`)
+- If first run: `new_branch = "<project-name>"` (unchanged — repos already on this branch from `/add-repo`)
+
+**Save branch suffix to project config:**
+
+Update `.shura/config.json`:
+- Set `branch_suffix` to `<goal-slug>`
+
+**If `is_rerun` — create new branch in each repo worktree:**
+
+For each registered repo (read from `.shura/repos/*/config.json`):
+1. `cd <repo.path>`
+2. Fetch latest from upstream:
+   - `git fetch` (fetches from the configured remote, or the local source path)
+3. Detect the default upstream branch:
+   ```bash
+   git remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}'
+   ```
+   Fall back to `main`, then `master` if the remote query fails.
+4. Create and switch to the new branch from the upstream default:
+   ```bash
+   git checkout -b <new_branch> origin/<default_branch>
+   # or if no remote: git checkout -b <new_branch> <default_branch>
+   ```
+5. Update `.shura/repos/<slug>/config.json`: set `branch` to `new_branch` and `status` to `"ready"`.
+
+If branch creation fails for any repo, warn the user with the repo name and error, then continue with remaining repos.
 
 ## Step 7: Auto-launch all repo teams
 

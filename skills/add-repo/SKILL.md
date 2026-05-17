@@ -91,11 +91,37 @@ Create directory `.shura/repos/<slug>/` and write `.shura/repos/<slug>/config.js
   "path": "<absolute-path-to-project>/repos/<slug>",
   "branch": "<project-name>",
   "status": "ready",
-  "epic": ""
+  "epic": "",
+  "stack": "<detected-stack>",
+  "team": {
+    "mandatory": ["Engineering Manager", "Product Owner", "<stack-specific-developer>"],
+    "optional": ["<optional-role-1>", "<optional-role-2>"]
+  }
 }
 ```
 
 Update `.shura/config.json`: set `status` to `"repos-added"` (unless it's already `"goal-set"` or later — don't downgrade).
+
+## Step 3.5: Detect stack and load team template
+
+After the repo is checked out/cloned, detect its tech stack:
+
+```js
+import { detectStack } from './stack-detector.js';
+const stack = await detectStack(repoPath);
+```
+
+Load the matching team template from the plugin directory (two levels up from `skills/add-repo/`):
+
+```
+agents/templates/{stack}.md
+```
+
+Parse the YAML frontmatter of that template file to extract:
+- `roles.mandatory` — the list of mandatory role names for this stack
+- `roles.optional` — the list of optional role names
+
+Store these as `team.mandatory` and `team.optional`.
 
 ## Step 4: Confirm
 
@@ -106,6 +132,8 @@ Update `.shura/config.json`: set `status` to `"repos-added"` (unless it's alread
   Path:    repos/<slug>/
   Branch:  <project-name>
   Type:    <Local worktree | Remote clone>
+  Stack:   <detected-stack>
+  Team:    <mandatory-role-1>, <mandatory-role-2>, ... (+ <N> optional)
 
 Run /add-repo again to add more repos, or /goal to set the mission.
 ```

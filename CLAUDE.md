@@ -25,3 +25,16 @@ Follow the RED-GREEN-REFACTOR cycle from `superpowers:writing-skills` (external 
 
 ## Agent Prompts
 Templates use `{snake_case_placeholders}`. When a skill says "load agent prompt from agents/X.md", read the file, replace all placeholders with real values from `.shura/` state, then dispatch the Agent.
+
+## Team Templates
+
+Stack detection runs automatically during `/add-repo`.
+
+**Detection module:** `skills/add-repo/stack-detector.js` — ESM module exporting `detectStack(repoPath)` which returns one of nine stack type strings. Default fallback stack when no fingerprint matches: `backend`.
+
+**Templates:** `agents/templates/<stack-type>.md` — each has YAML frontmatter with:
+- `stack`: the stack type string
+- `roles.mandatory`: list of required roles for this stack
+- `roles.optional`: list of optional roles
+
+**Supported stacks:** `frontend`, `backend`, `mobile`, `fullstack`, `devops`, `data-ml`, `python`, `cpp`, `claude-code-plugin`

@@ -45,6 +45,6 @@ When a Repo Manager escalates to you:
 
 ## Push Protocol
 When told a team has completed work and pushed their branch:
-1. Confirm: "Confirmed — {repo_name} branch `{branch}` is ready for integration"
+1. Confirm to the User: "Confirmed — [repo name] branch is ready for integration" (use the repo name and branch the Repo Manager mentioned in their message)
 2. Continue coordinating remaining teams
 3. When ALL repos are complete: report final status to User with list of branches to integrate

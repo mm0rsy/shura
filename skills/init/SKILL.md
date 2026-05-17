@@ -1,82 +1,75 @@
 ---
 name: init
-description: Use when the user runs /init to spin up per-repo agent teams (Repo Manager + PO + Dev) and begin parallel execution across all registered repositories.
+description: Use when the user runs /init to initialize a new shura project directory with a name and ticket ID.
 ---
 
-# /init — Launch the Council Teams
+# /init — Initialize Shura Project
 
-Spins up one team per repo, all running in parallel. Each Repo Manager self-organizes its own PO and Dev(s). Use /get-manager to check in after launching.
+Creates the project directory and `.shura/` state.
 
 ## Prerequisites
 
-- `.shura/config.json` must exist with `status` at `"goal-set"` or later
-- All registered repos must have a non-empty `epic` field (set by /goal)
+Run from the directory where you want the project created.
 
-If any repo has an empty `epic`, warn and abort:
-> "Repo {name} has no epic assigned. Run /goal first to assign epics to all repos."
-List all repos missing epics before aborting.
+## Step 1: Check for existing project
 
-## Steps
+If `.shura/config.json` already exists in the current directory, warn:
+> "A shura project already exists here: {name} ({ticket}). Do you want to overwrite it?"
+Wait for confirmation before continuing.
 
-**1. Load all configs**
+## Step 2: Ask for project name
 
-Read `.shura/config.json` (project name, ticket, goal).
-List and read all `.shura/repos/*/config.json`. Only proceed for repos where `epic` is non-empty.
+> "What's the project name? (Used as the directory name and branch prefix — no spaces, e.g. `payment-revamp`)"
 
-**2. Load all agent prompt templates**
+Validate: lowercase letters, numbers, hyphens only. If the user gives a name with spaces or mixed case, suggest the normalized form and confirm.
 
-Find the shura plugin directory (two levels up from `skills/init/`). Read:
-- `agents/repo-manager.md`
+Normalization: lowercase → replace spaces and underscores with hyphens → strip non-alphanumeric characters except hyphens.
 
-(The Repo Manager will read `agents/po.md` itself when spawning the PO; the PO will read `agents/dev.md` itself when spawning Devs.)
+## Step 3: Ask for ticket ID
 
-**3. Announce launch**
+> "Ticket ID? (e.g. PROJ-1234, or press enter to skip)"
+
+Accept any string or empty input. If empty, store `"none"`.
+
+## Step 4: Create directory structure
+
+```bash
+mkdir -p <project-name>/repos
+mkdir -p <project-name>/.shura/repos
+```
+
+## Step 5: Write `.shura/config.json`
+
+```json
+{
+  "name": "<project-name>",
+  "ticket": "<ticket-id-or-none>",
+  "created": "<current-ISO-8601-timestamp>",
+  "status": "initialized",
+  "goal": ""
+}
+```
+
+Use the actual current timestamp in ISO 8601 format (e.g., `2026-05-17T19:04:00Z`).
+
+## Step 6: Confirm
 
 Display:
 ```
-Launching shura council for: {project_name}
-Repositories: {N} repos
-  {for each repo: - {name} | branch: {branch}}
+✓ Shura project initialized
 
-Starting all teams simultaneously...
+  Name:    <project-name>
+  Ticket:  <ticket-id>
+  Path:    ./<project-name>/
+
+Next steps:
+  /add-repo  — add repositories to the council
+  /goal      — state the mission once repos are added
 ```
 
-**4. Dispatch all Repo Manager agents in parallel**
+## Notes
 
-For each repo, fill `agents/repo-manager.md` placeholders:
-- `{repo_name}` → `repo.name`
-- `{project_name}` → `config.name`
-- `{ticket_id}` → `config.ticket`
-- `{repo_path}` → `repo.path`
-- `{branch}` → `repo.branch`
-- `{goal}` → `config.goal`
-- `{epic}` → `repo.epic`
-- `{plugin_dir}` → absolute path to the shura plugin directory (the directory containing this skills/init/SKILL.md, two levels up)
-
-Dispatch ALL Repo Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
-
-**5. Update project status**
-
-Update `.shura/config.json`: set `status` to `"running"`.
-
-**6. Confirm**
-
-```
-✓ All {N} teams launched.
-
-Each team is running:
-  Repo Manager → will spawn PO → PO will spawn Dev(s)
-
-Use /get-manager to talk to the Senior Manager and track overall progress.
-When teams complete, they will push their branches and notify the Senior Manager.
-```
-
-## After Teams Complete
-
-Each Repo Manager pushes its branch and notifies the Senior Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
-
-## Re-running /init
-
-If teams were already launched (`status: "running"`), warn:
-> "Teams are already running. Use /get-manager to check status. Re-run /init to restart all teams from scratch?"
-Wait for confirmation before re-dispatching.
+- The project directory is created in the current working directory
+- All subsequent commands (`/add-repo`, `/goal`, `/start`) must be run from inside `<project-name>/`
+- The `repos/` subdirectory is where worktrees and clones will live
+- `.shura/` holds state only — not code

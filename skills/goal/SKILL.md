@@ -57,7 +57,7 @@ You have just received the mission. Run the department meeting now:
 3. For each repo, propose a clear epic and ask the User if it looks right
 4. Adjust epics based on User feedback until all are confirmed
 5. When all epics are confirmed, say exactly:
-   "EPICS CONFIRMED. Please run /init to launch the teams."
+   "EPICS CONFIRMED. Please run /start to launch the teams."
    Then stop and wait.
 ```
 
@@ -76,10 +76,10 @@ For each repo, update `.shura/repos/<slug>/config.json`:
 - Set `epic` to the confirmed epic text for that repo
 
 Confirm to the user:
-> "Epics saved. Run /init to spin up the repo teams."
+> "Epics saved. Run /start to spin up the repo teams."
 
 ## Notes
 
-- The SM agent must reach "EPICS CONFIRMED" before /init can proceed
+- The SM agent must reach "EPICS CONFIRMED" before /start can proceed
 - If the user wants to revise epics later, they can re-run /goal (overwrite confirmation in step 1)
 - The `{test_command}` for each repo is not known at this stage — Devs will determine it when they explore their repos

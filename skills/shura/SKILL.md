@@ -11,19 +11,19 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 
 | Command | When to use |
 |---------|-------------|
-| `/start` | First step — create the project directory |
+| `/init` | First step — create the project directory |
 | `/add-repo` | Add each repository (local worktree or remote clone) |
 | `/goal` | State the mission; Senior Manager splits work across repos |
-| `/init` | Spawn all repo teams and begin execution |
+| `/start` | Spawn all repo teams and begin execution |
 | `/get-manager` | Open a conversation with the Senior Manager at any time |
 
 ## Typical Flow
 
 ```
-/start → /add-repo (×N) → /goal → /init
+/init → /add-repo (×N) → /goal → /start
 ```
 
-After `/init`, use `/get-manager` to check in. The Senior Manager handles everything else.
+After `/start`, use `/get-manager` to check in. The Senior Manager handles everything else.
 
 ## Agent Hierarchy
 

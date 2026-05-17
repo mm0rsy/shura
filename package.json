@@ -2,5 +2,15 @@
   "name": "shura",
   "version": "0.1.0",
   "type": "module",
-  "description": "Multi-agent, multi-repo orchestration council for cross-repo development"
+  "description": "Multi-agent, multi-repo orchestration council for cross-repo development",
+  "keywords": ["claude-code", "multi-agent", "orchestration", "multi-repo"],
+  "author": "mm0rsy",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mm0rsy/shura"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }

@@ -34,10 +34,15 @@ When all epics are confirmed with the User, output this block exactly before say
 EPICS:
 - <repo-slug>: <final confirmed epic text>
 - <repo-slug>: <final confirmed epic text>
+BRANCH: <goal-slug>
 EPICS CONFIRMED.
 ```
 
-Use the repo slug (the short identifier from the council list, not the display name). One line per repo, no extra formatting. The system parses this block to save epics — any deviation will break the auto-launch.
+Use the repo slug (the short identifier from the council list, not the display name). One line per repo, no extra formatting.
+
+**`BRANCH: <goal-slug>`** — derive a short, URL-safe slug from the mission text: lowercase, hyphens, 3–5 meaningful words. Examples: `add-oauth2-auth`, `stripe-payment-migration`, `dark-mode-ui`. This becomes the branch suffix for goal versioning.
+
+The system parses this block to save epics and create versioned branches — any deviation will break the auto-launch.
 
 ## EM Briefing Format (post-confirmation)
 After epics are confirmed with the User and before teams are launched:

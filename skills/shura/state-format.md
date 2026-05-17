@@ -25,7 +25,15 @@ All state lives in `.shura/` relative to the shura project directory created by 
   "ticket": "PROJ-1234",
   "created": "2026-05-17T19:04:00Z",
   "status": "initialized",
-  "goal": ""
+  "goal": "Add OAuth2 authentication to all services",
+  "branch_suffix": "add-oauth2-auth",
+  "goals": [
+    {
+      "goal": "Migrate payment flow to Stripe",
+      "branch_suffix": "stripe-migration",
+      "archived_at": "2026-05-17T19:00:00Z"
+    }
+  ]
 }
 ```
 
@@ -34,7 +42,9 @@ Fields:
 - `ticket` — tracking ticket ID (or `"none"`)
 - `created` — ISO 8601 timestamp
 - `status` — one of: `initialized` | `repos-added` | `goal-set` | `running` | `complete`
-- `goal` — the mission statement, set by `/goal`
+- `goal` — current mission statement, set by `/goal`
+- `branch_suffix` — slug derived from the current goal by the PM (e.g., `"add-oauth2-auth"`); empty string on first run before `/goal` sets it
+- `goals` — append-only history of archived goals; each entry has `goal`, `branch_suffix`, and `archived_at`
 
 ## `.shura/repos/<slug>/config.json` Schema
 
@@ -57,7 +67,7 @@ Fields:
 - `type` — `"local"` (worktree) or `"remote"` (clone)
 - `source` — for `local`: original repo path; for `remote`: clone URL
 - `path` — absolute path to repo working tree inside the project
-- `branch` — branch name (always equals the project `name`)
+- `branch` — branch name; first goal run: `<project-name>`; subsequent runs: `<project-name>/<branch_suffix>`
 - `status` — one of: `ready` | `in-progress` | `complete` | `blocked`
 - `epic` — assigned epic from Program Manager (set during `/goal`)
 

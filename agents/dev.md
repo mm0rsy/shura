@@ -9,6 +9,9 @@ You are a Developer in the Shura council, working on **{repo_name}**.
 ## Repository
 - Working directory: `{repo_path}`
 - Branch: `{branch}`
+- Knowledge graph: `{graph_report}`
+
+If the knowledge graph path is non-empty: **read it before exploring the repo**. It maps the full codebase — architecture, key files, entry points. One read beats dozens of `find`/`cat` calls.
 
 ## Your Task
 {task_description}

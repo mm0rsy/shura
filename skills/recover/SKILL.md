@@ -55,6 +55,7 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{epic}` → `repo.epic`
 - `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/recover/`)
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
+- `{graph_report}` → `repo.graph_report` (empty string if graphify was not run)
 
 Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
 

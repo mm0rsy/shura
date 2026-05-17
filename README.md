@@ -8,16 +8,27 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 claude plugin install https://github.com/mm0rsy/shura
 ```
 
-Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, `/init`, `/add-repo`, `/goal`, `/get-manager`, and `/recover` commands are available in any Claude Code session.
+Requires [Claude Code](https://claude.ai/code). After installing, the `/shura`, `/init`, `/add-repo`, `/goal`, `/get-manager`, `/status`, and `/recover` commands are available in any Claude Code session.
+
+### Optional: graphify (recommended)
+
+[graphify](https://github.com/safishamsi/graphify) builds a knowledge graph of each repo so agents can understand the codebase in one read instead of exploring blind. Install before running `/add-repo`:
+
+```bash
+uv tool install graphifyy && graphify install
+```
+
+Without graphify, agents still work — they just explore the codebase manually.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
 | `/init` | Initialize a shura project directory |
-| `/add-repo` | Add a repo to the council (local worktree or remote clone); branch is named after the project automatically |
+| `/add-repo` | Add a repo to the council (local worktree or remote clone); auto-indexes with graphify if installed |
 | `/goal` | Set the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Talk to the Program Manager at any time |
+| `/status` | Live dashboard — see every repo team's status and recent decisions |
 | `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
 ## Team Templates
@@ -66,11 +77,23 @@ User ─── /get-manager ──► Program Manager (PM)
 - **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts
 - **Escalation chain:** Dev escalates to PO → PO escalates to EM → EM escalates to PM (who convenes a Board)
 
+## Goal Versioning
+
+When you re-run `/goal` on an existing project, shura starts a new goal cycle:
+
+- The current goal is archived to a `goals[]` history in `config.json`
+- The PM derives a short branch slug from the mission text (e.g., `add-oauth2-auth`)
+- Each repo worktree gets a new branch: `<project-name>/<goal-slug>` (created from the latest upstream default)
+- First run keeps the original `<project-name>` branch — no change
+
+This means each goal has its own branch and a clean history. Old work stays on the previous branch.
+
 ## Getting Started
 
 1. `/init` — name your project
-2. `/add-repo` — add each repository
+2. `/add-repo` — add each repository (installs graphify knowledge graph if available)
 3. `/goal` — state the mission; teams launch automatically after the stakeholder meeting
+4. `/status` — check team progress at any time
 
 ## Glossary
 

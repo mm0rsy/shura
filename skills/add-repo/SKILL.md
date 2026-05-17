@@ -123,7 +123,27 @@ Parse the YAML frontmatter of that template file to extract:
 
 Store these as `team.mandatory` and `team.optional`.
 
-## Step 4: Confirm
+## Step 4: Index the repo with graphify
+
+Check if graphify is installed:
+```bash
+graphify --version
+```
+
+**If installed:**
+1. Run the indexer inside the worktree/clone:
+   ```bash
+   cd <repo.path> && graphify .
+   ```
+2. The report lands at `<repo.path>/graphify-out/GRAPH_REPORT.md`
+3. Update `.shura/repos/<slug>/config.json`: add `"graph_report": "<repo.path>/graphify-out/GRAPH_REPORT.md"`
+
+**If not installed:**
+- Warn:
+  > "graphify not found — repo knowledge graph unavailable. Agents will explore the codebase without a pre-built index. Install with: `uv tool install graphifyy && graphify install`"
+- Set `"graph_report": ""` in config
+
+## Step 5: Confirm
 
 ```
 ✓ Repo registered: <name>
@@ -134,6 +154,7 @@ Store these as `team.mandatory` and `team.optional`.
   Type:    <Local worktree | Remote clone>
   Stack:   <detected-stack>
   Team:    <mandatory-role-1>, <mandatory-role-2>, ... (+ <N> optional)
+  Graph:   <GRAPH_REPORT.md path | "not indexed (graphify not installed)">
 
 Run /add-repo again to add more repos, or /goal to set the mission.
 ```

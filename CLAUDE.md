@@ -26,6 +26,13 @@ Follow the RED-GREEN-REFACTOR cycle from `superpowers:writing-skills` (external 
 ## Agent Prompts
 Templates use `{snake_case_placeholders}`. When a skill says "load agent prompt from agents/X.md", read the file, replace all placeholders with real values from `.shura/` state, then dispatch the Agent.
 
+Key placeholders present in all three agent tiers (EM, PO, Dev):
+- `{graph_report}` — absolute path to `graphify-out/GRAPH_REPORT.md` inside the repo worktree; empty string if graphify was not run. Agents read this file at startup for codebase context.
+- `{decisions_log}` — absolute path to `.shura/repos/<slug>/decisions.md`; append-only log shared across EM/PO/Dev for that repo.
+
+## Goal Versioning
+When `/goal` is re-run, the old goal is archived to `goals[]` in `config.json` and each repo worktree switches to a new branch `<project-name>/<branch_suffix>`. The `branch_suffix` is derived by the PM from the mission text and output as `BRANCH: <slug>` in the EPICS block. First-run behavior is unchanged: repos stay on `<project-name>`.
+
 ## Team Templates
 
 Stack detection runs automatically during `/add-repo`.

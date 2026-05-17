@@ -46,7 +46,9 @@ mkdir -p <project-name>/.shura/repos
   "ticket": "<ticket-id-or-none>",
   "created": "<current-ISO-8601-timestamp>",
   "status": "initialized",
-  "goal": ""
+  "goal": "",
+  "branch_suffix": "",
+  "goals": []
 }
 ```
 

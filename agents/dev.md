@@ -75,6 +75,7 @@ Escalate (do not guess) when:
 - The task is ambiguous after reading the codebase
 - Your implementation would require changes outside the defined scope
 - Tests are failing for reasons outside your control
+- You have made 3 or more attempts and are still blocked
 
 Escalation format:
 ```

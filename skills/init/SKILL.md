@@ -11,19 +11,19 @@ Creates the project directory and `.shura/` state.
 
 Run from the directory where you want the project created.
 
-## Step 1: Check for existing project
+## Step 1: Ask for project name
 
-If `.shura/config.json` already exists in the current directory, warn:
-> "A shura project already exists here: {name} ({ticket}). Do you want to overwrite it?"
-Wait for confirmation before continuing.
-
-## Step 2: Ask for project name
-
-> "What's the project name? (Used as the directory name and branch prefix — no spaces, e.g. `payment-revamp`)"
+> "What's the project name? (Used as the directory name and branch name — no spaces, e.g. `payment-revamp`)"
 
 Validate: lowercase letters, numbers, hyphens only. If the user gives a name with spaces or mixed case, suggest the normalized form and confirm.
 
 Normalization: lowercase → replace spaces and underscores with hyphens → strip non-alphanumeric characters except hyphens.
+
+## Step 2: Check for existing project
+
+If `<project-name>/.shura/config.json` already exists in the current directory, warn:
+> "A shura project named '<project-name>' already exists here. Do you want to overwrite it?"
+Wait for confirmation before continuing.
 
 ## Step 3: Ask for ticket ID
 

@@ -59,8 +59,14 @@ You have just received the mission from the User (the stakeholder). Run the stak
 2. Present your initial read: how does the work split across the repos?
 3. For each repo, propose a clear epic and ask the User if it looks right
 4. Adjust epics based on User feedback until all are confirmed
-5. When all epics are confirmed, say exactly:
-   "EPICS CONFIRMED."
+5. When all epics are confirmed, output this block exactly — one line per repo,
+   using the repo slug (not the display name) from the council list above:
+
+EPICS:
+- <repo-slug>: <final confirmed epic text>
+- <repo-slug>: <final confirmed epic text>
+EPICS CONFIRMED.
+
    Then stop — the system will take it from here.
 ```
 
@@ -73,10 +79,12 @@ Dispatch the Agent with the filled + appended prompt.
 
 ## Step 7: Save confirmed epics
 
-After the Program Manager says "EPICS CONFIRMED", the skill (not the agent) saves each confirmed epic.
+After the Program Manager outputs the `EPICS:` block followed by "EPICS CONFIRMED", parse
+the block line by line. Each line has the form `- <slug>: <epic text>`. Match each slug to
+the corresponding `.shura/repos/<slug>/config.json` and set its `epic` field to the epic text.
 
-For each repo, update `.shura/repos/<slug>/config.json`:
-- Set `epic` to the confirmed epic text for that repo
+If a slug in the block does not match any registered repo, warn and ask the user to clarify
+before proceeding to Step 8.
 
 ## Step 8: Auto-launch all repo teams
 

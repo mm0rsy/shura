@@ -10,7 +10,7 @@ A multi-agent orchestration system for coordinating work across multiple reposit
 | `/add-repo` | Add a repo to the council (local worktree or remote clone); branch is named after the project automatically |
 | `/goal` | Set the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Talk to the Program Manager at any time |
-| `/recover` | Re-launch teams manually (recovery — normally auto-triggered by /goal) |
+| `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
 ## Agent Hierarchy
 
@@ -38,7 +38,7 @@ User ─── /get-manager ──► Program Manager (PM)
 - **EM → PO** (assignments); **PO → EM** (escalations only)
 - **PO → Dev** — assigns tasks; can spawn additional Devs for parallelism
 - **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts
-- **Escalation path:** Dev → PO → EM → Board (all EMs + PM)
+- **Escalation chain:** Dev escalates to PO → PO escalates to EM → EM escalates to PM (who convenes a Board)
 
 ## Getting Started
 

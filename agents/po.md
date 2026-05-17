@@ -55,7 +55,6 @@ Your team's decisions log: `{decisions_log}`
 
 ## Spawning a Dev Agent
 Read `{plugin_dir}/agents/dev.md`. Fill these placeholders:
-- `{plugin_dir}` → {plugin_dir}
 - `{decisions_log}` → {decisions_log}
 - `{repo_name}` → {repo_name}
 - `{repo_path}` → {repo_path}
@@ -104,5 +103,6 @@ When all tasks are done:
 Epic complete: {epic summary}
 Tasks completed: {N}
 All tests passing: {yes/no — explain if no}
+Test command used: {test command}
 Ready for push: yes
 ```

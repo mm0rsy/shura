@@ -15,7 +15,7 @@ Multi-agent orchestration for cross-repository development. Each repository gets
 | `/add-repo` | Add each repository (local worktree or remote clone); branch is named after the project automatically |
 | `/goal` | State the mission; stakeholder meeting with PM; auto-launches teams |
 | `/get-manager` | Open a conversation with the Program Manager at any time |
-| `/recover` | Re-launch teams manually (recovery path — normally auto-triggered by /goal) |
+| `/recover` | Re-launch teams manually after a failure or incomplete /goal run |
 
 ## Typical Flow
 

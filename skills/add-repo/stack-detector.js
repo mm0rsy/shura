@@ -1,5 +1,8 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function exists(p) {
   try {
@@ -10,7 +13,30 @@ async function exists(p) {
   }
 }
 
-export async function detectStack(repoPath) {
+function deriveNamespace(repoSlug) {
+  // "affaan-m/everything-claude-code" → "everything-claude-code"
+  // "alirezarezvani/claude-skills" → "claude-skills"
+  return repoSlug.split('/')[1];
+}
+
+function filterSkillNames(names, installedNamespaces) {
+  if (!installedNamespaces.length) return [];
+  return names.filter(name => installedNamespaces.includes(name.split(':')[0]));
+}
+
+function filterSpecialistRoles(roles, installedNamespaces) {
+  const result = {};
+  for (const [roleName, roleConfig] of Object.entries(roles)) {
+    if (roleConfig.source === 'builtin') {
+      result[roleName] = roleConfig;
+    } else if (installedNamespaces.includes(roleConfig.name.split(':')[0])) {
+      result[roleName] = roleConfig;
+    }
+  }
+  return result;
+}
+
+async function detectStackType(repoPath) {
   try {
     // 1. claude-code-plugin: .claude-plugin/ directory exists
     if (await exists(path.join(repoPath, '.claude-plugin'))) {
@@ -55,10 +81,9 @@ export async function detectStack(repoPath) {
     const hasPkg = await exists(pkgPath);
     const frontendFrameworks = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt'];
 
-    let pkg = null;
     let allDeps = {};
     if (hasPkg) {
-      pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
+      const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
       allDeps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
       const hasFrontendDep = frontendFrameworks.some(fw => allDeps[fw] !== undefined || Object.keys(allDeps).some(dep => dep.startsWith(fw + '/')));
 
@@ -101,4 +126,26 @@ export async function detectStack(repoPath) {
   } catch {
     return 'backend';
   }
+}
+
+export async function detectStack(repoPath, skillRepos = []) {
+  const stack = await detectStackType(repoPath);
+
+  let skillMap = {};
+  try {
+    const mapPath = path.join(__dirname, 'skill-map.json');
+    skillMap = JSON.parse(await fs.readFile(mapPath, 'utf8'));
+  } catch {
+    // skill-map not found — return stack with empty skill/role data
+  }
+
+  const entry = skillMap[stack] || { must_use: [], recommended: [], specialist_roles: {} };
+  const installedNamespaces = skillRepos.map(deriveNamespace);
+
+  return {
+    stack,
+    must_use_skills: filterSkillNames(entry.must_use || [], installedNamespaces),
+    recommended_skills: filterSkillNames(entry.recommended || [], installedNamespaces),
+    specialist_roles: filterSpecialistRoles(entry.specialist_roles || {}, installedNamespaces),
+  };
 }

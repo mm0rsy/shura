@@ -20,6 +20,16 @@ uv tool install graphifyy && graphify install
 
 Without graphify, agents still work — they just explore the codebase manually.
 
+### Optional: External Skill Repos (recommended)
+
+Shura integrates with external Claude Code skill plugins to give your agent teams domain expertise. When installed, Product Owners can hire specialists backed by these skills.
+
+**[claude-skills](https://github.com/alirezarezvani/claude-skills)** — 313+ engineering, product, ML, and compliance skills
+
+**[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** — 232 skills, 60 specialized agents, TDD workflows, security scanning
+
+Install each as a Claude Code plugin, then declare them when running `/init`.
+
 ## Commands
 
 | Command | Description |
@@ -35,19 +45,19 @@ Without graphify, agents still work — they just explore the codebase manually.
 
 When `/add-repo` is called, Shura auto-detects the repository's tech stack and loads the matching team template. The detection logic lives in `skills/add-repo/stack-detector.js`. Templates live in `agents/templates/<stack-type>.md`.
 
-Each template defines the mandatory roles that are always spawned for that stack, plus optional roles available for specialized work.
+Each template defines a Product Owner (always present) and a catalogue of specialists the PO can hire on-demand.
 
-| Stack | Mandatory Roles |
-|-------|----------------|
-| frontend | Engineering Manager, Product Owner, Frontend Developer |
-| backend | Engineering Manager, Product Owner, Backend Developer |
-| mobile | Engineering Manager, Product Owner, Mobile Developer |
-| fullstack | Engineering Manager, Product Owner, Full-Stack Developer |
-| devops | Engineering Manager, Product Owner, DevOps Engineer |
-| data-ml | Engineering Manager, Product Owner, ML Engineer |
-| python | Engineering Manager, Product Owner, Python Developer |
-| cpp | Engineering Manager, Product Owner, C++ Developer |
-| claude-code-plugin | Engineering Manager, Product Owner, JS/ESM Developer, Prompt Engineer |
+| Stack | Always Present | Available Specialists |
+|-------|---------------|----------------------|
+| frontend | Product Owner | Developer, Tester, Architect, Accessibility Reviewer, Performance Engineer |
+| backend | Product Owner | Developer, Tester, Architect, Database Engineer, Security Reviewer |
+| mobile | Product Owner | Developer, Tester, Architect, Security Reviewer |
+| fullstack | Product Owner | Developer, Tester, Architect, Database Engineer, Security Reviewer |
+| devops | Product Owner | Developer, Security Auditor, Architect |
+| data-ml | Product Owner | Developer, ML Engineer, Data Architect, Tester, Security Reviewer |
+| python | Product Owner | Developer, Tester, Architect, Security Reviewer |
+| cpp | Product Owner | Developer, Tester, Security Reviewer |
+| claude-code-plugin | Product Owner | Developer, Tester, Architect, Technical Writer, Security Reviewer |
 
 ## Agent Hierarchy
 
@@ -56,26 +66,23 @@ User ─── /get-manager ──► Program Manager (PM)
                                │
                     ┌──────────┼──────────┐
                     ▼          ▼          ▼
-             Engineering    Engineering  Engineering
-             Manager (EM)   Manager (EM) Manager (EM)
-                    │
-                    ▼
-             Product Owner (PO)
-                    │
-               ┌────┴────┐
-               ▼         ▼
-              Dev        Dev
+             Product         Product    Product
+             Owner (PO)      Owner (PO) Owner (PO)
+                  │
+       ┌──────────┼──────────┐
+       ▼          ▼          ▼
+  Developer   Tester    Architect
+              (on-demand specialists)
 ```
 
 ## Communication Rules
 
 - **User ↔ PM** — only touch point for the user
-- **PM ↔ EM** — bidirectional; PM runs board meetings
-- **EM ↔ EM** — peer communication during Board sessions only
-- **EM → PO** (assignments); **PO → EM** (escalations only)
-- **PO → Dev** — assigns tasks; can spawn additional Devs for parallelism
+- **PM ↔ PO** — bidirectional; PM runs Product Board meetings
+- **PO ↔ PO** — peer communication during Product Board sessions only
+- **PO → Specialists/Dev** — PO hires and assigns; Specialists/Dev escalate up if blocked
 - **Escalation triggers:** blocked tasks, cross-repo conflicts, unclear requirements, or 3+ failed attempts
-- **Escalation chain:** Dev escalates to PO → PO escalates to EM → EM escalates to PM (who convenes a Board)
+- **Escalation chain:** Dev/Specialist escalates to PO → PO escalates to PM (who convenes a Product Board)
 
 ## Goal Versioning
 
@@ -99,8 +106,8 @@ This means each goal has its own branch and a clean history. Old work stays on t
 
 | Term | Role |
 |------|------|
-| PM | Program Manager — user's only touchpoint; coordinates all teams |
-| EM | Engineering Manager — one per repo; owns the epic, spawns PO |
-| PO | Product Owner — breaks epic into tasks, manages and spawns Devs |
+| PM | Program Manager — user's only touchpoint; coordinates all POs |
+| PO | Product Owner — one per repo; owns the epic, hires specialists, pushes branch |
 | Dev | Developer agent — executes tasks; can be spawned dynamically for parallelism |
-| Board | All EMs + PM — convenes for cross-repo decisions and escalations |
+| Specialist | On-demand agent (Tester, Architect, Tech Writer, etc.) hired by PO from external skill repos |
+| Product Board | All POs + PM — convenes for cross-repo decisions and escalations |

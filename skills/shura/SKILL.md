@@ -5,7 +5,7 @@ description: Use when the user asks about shura commands, needs a command overvi
 
 # Shura — The Consultative Council
 
-Multi-agent orchestration for cross-repository development. Each repository gets its own team (EM + PO + Dev). A Program Manager (PM) coordinates all teams toward a shared mission.
+Multi-agent orchestration for cross-repository development. Each repository gets its own Product Owner who leads a team of on-demand specialists. A Program Manager (PM) coordinates all POs toward a shared mission.
 
 ## Commands
 
@@ -30,24 +30,23 @@ After teams launch, use `/get-manager` to check in and `/status` to see team pro
 
 ```
 User
- └─ Program Manager (PM)        (/get-manager)
-      ├─ Engineering Manager (EM) A   (one per repo)
-      │    └─ Product Owner (PO) A
-      │         └─ Dev A1, Dev A2 (PO can spawn more)
-      ├─ Engineering Manager (EM) B
-      │    └─ Product Owner (PO) B
-      │         └─ Dev B1
+ └─ Program Manager (PM)                  (/get-manager)
+      ├─ Product Owner (PO) A              (one per repo — visible terminal)
+      │    ├─ Developer A1, Developer A2
+      │    ├─ Architect A                  (on-demand specialists)
+      │    └─ Tester A                     (subagents below PO — not separately visible)
+      ├─ Product Owner (PO) B
+      │    └─ Developer B1
       └─ ...
 ```
 
 ## Communication Rules
 
 - **User speaks only to Program Manager (PM)**
-- **PM ↔ EM** — bidirectional; PM runs board meetings
-- **EM ↔ EM** — peer communication during Board sessions only
-- **EM → PO** (assignments); **PO → EM** (escalations only)
-- **PO → Dev** — assigns tasks; Dev escalates up if blocked
-- **Board meeting** — triggered when any EM escalates; all EMs + PM attend
+- **PM ↔ PO** — bidirectional; PM runs Product Board meetings
+- **PO ↔ PO** — peer communication during Product Board sessions only
+- **PO → Specialists/Dev** — PO hires and assigns; Specialists/Dev escalate up if blocked
+- **Product Board meeting** — triggered when any PO escalates; all POs + PM attend
 
 ### Escalation Triggers
 
@@ -57,11 +56,11 @@ Escalation activates on: blocked tasks, cross-repo conflicts, unclear requiremen
 
 | Term | Role |
 |------|------|
-| PM | Program Manager — user's only touchpoint; coordinates all teams |
-| EM | Engineering Manager — one per repo; owns the epic, spawns PO |
-| PO | Product Owner — breaks epic into tasks, manages and spawns Devs |
+| PM | Program Manager — user's only touchpoint; coordinates all POs |
+| PO | Product Owner — one per repo; owns the epic, hires specialists, pushes branch |
 | Dev | Developer agent — executes tasks; can be spawned dynamically for parallelism |
-| Board | All EMs + PM — convenes for cross-repo decisions and escalations |
+| Specialist | On-demand agent (Tester, Architect, Tech Writer, etc.) hired by PO from external skill repos |
+| Product Board | All POs + PM — convenes for cross-repo decisions and escalations |
 
 ## State
 

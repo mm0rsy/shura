@@ -2,37 +2,35 @@
 stack: frontend
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - Frontend Developer
-  optional:
-    - UX Designer
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
     - Accessibility Reviewer
     - Performance Engineer
 ---
 
 # Frontend Team Template
 
-This template is used for repositories classified as `frontend` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `frontend` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements UI features and fixes. Follows existing component structure, styling conventions, and test suite. Commits changes and reports to PO.
 
-### Frontend Developer
-Implements UI features and fixes in the frontend codebase. Follows the project's component structure, styling conventions, and test suite. Commits changes to `{branch}`. Reports completion to the Product Owner.
+### Architect (hire when: significant structural changes, new component library, or routing redesign)
+Produces a technical design document scoped to the epic. Delivers decisions the Developer can implement without gaps.
 
-## Optional Roles
+### Tester (hire when: critical user flows affected, coverage gaps in existing suite, or after major feature addition)
+Writes and runs tests for the affected UI flows. Delivers a test coverage report and any new test files.
 
-### UX Designer
-Produces interaction specs, wireframes, or annotated mockups for the `{epic}` feature set. Delivers assets that the Frontend Developer can implement directly without interpretation gaps.
+### Accessibility Reviewer (hire when: new UI components, form changes, or navigation changes)
+Audits output against WCAG criteria. Delivers concrete remediation steps for the Developer.
 
-### Accessibility Reviewer
-Audits frontend output against WCAG criteria. Flags violations in `{repo_name}` and provides concrete remediation steps for the Frontend Developer.
-
-### Performance Engineer
-Profiles bundle size, render performance, and runtime metrics. Provides actionable recommendations scoped to `{epic}` changes in `{repo_name}`.
+### Performance Engineer (hire when: bundle size or render performance is a concern for this epic)
+Profiles and identifies bottlenecks. Provides actionable recommendations scoped to epic changes.

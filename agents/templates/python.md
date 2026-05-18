@@ -2,33 +2,31 @@
 stack: python
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - Python Developer
-  optional:
-    - Data Scientist
-    - DevOps Engineer
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
+    - Security Reviewer
 ---
 
 # Python Team Template
 
-This template is used for repositories classified as `python` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `python` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements Python modules, scripts, and services. Follows existing package structure, naming conventions, and test suite (pytest/unittest). Commits changes and reports to PO.
 
-### Python Developer
-Implements features, scripts, and modules for `{repo_name}` following the project's coding style, dependency management conventions (e.g., `requirements.txt`, `pyproject.toml`), and test suite. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Architect (hire when: new modules, service decomposition, or ambiguous implementation approach)
+Designs the Python package structure, interface contracts, and implementation approach. Delivers a design document the Developer can follow directly.
 
-## Optional Roles
+### Tester (hire when: critical business logic affected, coverage gaps, or new public APIs added)
+Writes and runs pytest tests for the affected code. Delivers coverage report and new test files.
 
-### Data Scientist
-Performs exploratory analysis, feature engineering, or statistical modeling relevant to `{epic}`. Delivers reproducible notebooks or scripts the Python Developer can integrate into the production codebase.
-
-### DevOps Engineer
-Configures or updates CI/CD pipelines, Docker images, and deployment manifests needed to ship `{epic}` changes from `{repo_name}` to the target environment.
+### Security Reviewer (hire when: web endpoints, external HTTP calls, file I/O, or user input processing is changed)
+Audits for injection, deserialization, dependency, and input validation issues. Delivers findings with remediation.

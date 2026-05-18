@@ -160,8 +160,8 @@ graphify --version
 Run /add-repo again to add more repos, or /goal to set the mission.
 ```
 
-For Skills line: if `must_use_skills` and `recommended_skills` are both empty, show `"none (no skill repos configured)"`.
-For Roles line: list the keys of `specialist_roles`. If only `Developer` is present, show `"Developer only (no skill repos configured)"`.
+For Skills line: if `skillRepos` is empty (from config), show `"none (no skill repos configured)"`; otherwise show the actual counts.
+For Roles line: list the keys of `specialist_roles`. If only `Developer` is present and `skillRepos` is empty, show `"Developer only (no skill repos configured)"`; otherwise just list the role names.
 
 ## Error Handling
 

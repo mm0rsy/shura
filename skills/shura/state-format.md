@@ -33,6 +33,10 @@ All state lives in `.shura/` relative to the shura project directory created by 
       "branch_suffix": "stripe-migration",
       "archived_at": "2026-05-17T19:00:00Z"
     }
+  ],
+  "skill_repos": [
+    "alirezarezvani/claude-skills",
+    "affaan-m/everything-claude-code"
   ]
 }
 ```
@@ -45,6 +49,7 @@ Fields:
 - `goal` — current mission statement, set by `/goal`
 - `branch_suffix` — slug derived from the current goal by the PM (e.g., `"add-oauth2-auth"`); empty string on first run before `/goal` sets it
 - `goals` — append-only history of archived goals; each entry has `goal`, `branch_suffix`, and `archived_at`
+- `skill_repos` — array of `<owner>/<repo>` slugs for installed skill plugins; controls which skills and specialist roles are surfaced to agents; `[]` if none configured
 
 ## `.shura/repos/<slug>/config.json` Schema
 
@@ -58,6 +63,17 @@ Fields:
   "branch": "payment-revamp",
   "status": "ready",
   "epic": "",
+  "stack": "frontend",
+  "must_use_skills": ["everything-claude-code:tdd"],
+  "recommended_skills": [
+    "everything-claude-code:security-review",
+    "claude-skills:frontend"
+  ],
+  "specialist_roles": {
+    "Developer": {"source": "builtin", "file": "agents/dev.md"},
+    "Tester": {"source": "skill", "name": "claude-skills:qa"},
+    "Architect": {"source": "skill", "name": "everything-claude-code:architect"}
+  },
   "graph_report": "/home/user/projects/payment-revamp/repos/frontend/graphify-out/GRAPH_REPORT.md"
 }
 ```
@@ -71,6 +87,10 @@ Fields:
 - `branch` — branch name; first goal run: `<project-name>`; subsequent runs: `<project-name>/<branch_suffix>`
 - `status` — one of: `ready` | `in-progress` | `complete` | `blocked`
 - `epic` — assigned epic from Program Manager (set during `/goal`)
+- `stack` — detected stack type string (`frontend`, `backend`, etc.); written at `/add-repo` time
+- `must_use_skills` — skill names agents must invoke (e.g. TDD); empty array if no skill repos configured
+- `recommended_skills` — stack-relevant skill names for agent context; empty array if no skill repos configured
+- `specialist_roles` — map of role name → `{source, file|name}` filtered to installed repos; always contains at least `Developer` (builtin)
 - `graph_report` — absolute path to `graphify-out/GRAPH_REPORT.md` inside the repo; empty string if graphify was not run
 
 ## Decision Log Format
@@ -78,7 +98,7 @@ Fields:
 Decision logs are append-only markdown files stored inside `.shura/`. They are **never committed to any git repository** — they exist solely for agent context and failure recovery.
 
 - **`.shura/decisions.md`** — cross-repo decisions by the Program Manager
-- **`.shura/repos/<slug>/decisions.md`** — decisions by the Engineering Manager, PO, and Dev for that repo
+- **`.shura/repos/<slug>/decisions.md`** — decisions by the PO, Dev, and any specialists for that repo
 
 ### Entry format
 

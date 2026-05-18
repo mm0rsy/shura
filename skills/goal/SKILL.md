@@ -5,7 +5,7 @@ description: Use when the user runs /goal to define what the project should achi
 
 # /goal — Set the Mission
 
-Records the mission, runs an inline stakeholder meeting (you play the PM role directly — no subagent) to confirm epics, then dispatches all Engineering Manager agents in parallel.
+Records the mission, runs an inline stakeholder meeting (you play the PM role directly — no subagent) to confirm epics, then dispatches all Product Owner agents in parallel.
 
 > **Design note:** The stakeholder meeting is interactive and must stay in the main session. Only the EM/PO/Dev agents are dispatched as subagents — they are fire-and-forget workers, not conversational partners.
 
@@ -122,9 +122,9 @@ Immediately after saving epics, launch the teams without waiting for user input.
 Announce:
 > "Epics confirmed and saved. Launching all repo teams now..."
 
-Read `agents/eng-manager.md` from the plugin directory identified in step 4.
+Read `agents/po.md` from the plugin directory identified in step 4.
 
-For each repo, fill `agents/eng-manager.md` placeholders:
+For each repo, fill `agents/po.md` placeholders:
 - `{repo_name}` → `repo.name`
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
@@ -135,8 +135,13 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{plugin_dir}` → absolute path to the shura plugin directory
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 - `{graph_report}` → `repo.graph_report` (empty string if graphify was not run)
+- `{stack}` → `repo.stack` (empty string if not set — older repos without stack detection)
+- `{skill_repos}` → `config.skill_repos` joined as comma-separated string (or `"none"` if empty)
+- `{must_use_skills}` → `repo.must_use_skills` formatted as bullet list (`"  - skill1\n  - skill2"`) or empty string
+- `{recommended_skills}` → `repo.recommended_skills` formatted as bullet list or empty string
+- `{specialist_roles_json}` → `JSON.stringify(repo.specialist_roles, null, 2)` (or `"{}"` if not set)
 
-Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message.
+Dispatch ALL Product Owner agents simultaneously — send multiple Agent tool calls in a single message.
 
 Update `.shura/config.json`: set `status` to `"running"`.
 
@@ -145,7 +150,7 @@ Confirm:
 ✓ All {N} teams launched.
 
 Each team is running independently:
-  Engineering Manager → spawns PO → PO spawns Dev(s)
+  Product Owner → hires specialists and Developers as needed
 
 Use /get-manager to talk to the Program Manager and track progress.
 When teams complete, they will push their branches and notify you directly.

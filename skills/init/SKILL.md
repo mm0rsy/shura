@@ -31,14 +31,32 @@ Wait for confirmation before continuing.
 
 Accept any string or empty input. If empty, store `"none"`.
 
-## Step 4: Create directory structure
+## Step 4: Ask for installed skill repos
+
+> "Which external skill repos do you have installed as Claude Code plugins?
+> (comma-separated owner/repo slugs, e.g. alirezarezvani/claude-skills, affaan-m/everything-claude-code — press enter to skip)"
+
+Accept a comma-separated list or empty input.
+
+Normalize each entry:
+- Strip whitespace around commas
+- Validate format `<owner>/<repo>` — each part must be non-empty
+- If invalid format given, warn and ask again
+- If empty input, store `[]`
+
+Store the result as an array of strings, e.g.:
+```json
+["alirezarezvani/claude-skills", "affaan-m/everything-claude-code"]
+```
+
+## Step 5: Create directory structure
 
 ```bash
 mkdir -p <project-name>/repos
 mkdir -p <project-name>/.shura/repos
 ```
 
-## Step 5: Write `.shura/config.json`
+## Step 6: Write `.shura/config.json`
 
 ```json
 {
@@ -48,13 +66,15 @@ mkdir -p <project-name>/.shura/repos
   "status": "initialized",
   "goal": "",
   "branch_suffix": "",
-  "goals": []
+  "goals": [],
+  "skill_repos": ["<repo-slug-1>", "<repo-slug-2>"]
 }
 ```
 
 Use the actual current timestamp in ISO 8601 format (e.g., `2026-05-17T19:04:00Z`).
+If no skill repos were entered, write `"skill_repos": []`.
 
-## Step 6: Confirm
+## Step 7: Confirm
 
 Display:
 ```
@@ -63,6 +83,7 @@ Display:
   Name:    <project-name>
   Ticket:  <ticket-id>
   Path:    ./<project-name>/
+  Skills:  <N> skill repo(s) configured  [or: "none configured"]
 
 Next steps:
   /add-repo  — add repositories to the council
@@ -75,3 +96,4 @@ Next steps:
 - All subsequent commands (`/add-repo`, `/goal`, `/recover`) must be run from inside `<project-name>/`
 - The `repos/` subdirectory is where worktrees and clones will live
 - `.shura/` holds state only — not code
+- `skill_repos` can be updated later by editing `.shura/config.json` directly — rerun `/add-repo` after changing it to refresh the per-repo skill catalogue

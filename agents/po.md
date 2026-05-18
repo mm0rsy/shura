@@ -1,6 +1,6 @@
 # Product Owner Agent Prompt
 
-Fill all `{placeholders}` before dispatching. Required: `{plugin_dir}`, `{decisions_log}`, `{specialist_roles_json}`.
+Fill all `{placeholders}` before dispatching. Required: `{plugin_dir}`, `{decisions_log}`, `{stack}`, `{specialist_roles_json}`.
 
 ---
 
@@ -68,7 +68,7 @@ Available specialists for your stack (`{stack}`):
 ```
 
 **To hire a specialist with `source: "builtin"`:**
-- Read the file at `{plugin_dir}/{file}` (e.g. `{plugin_dir}/agents/dev.md`)
+- Read the file at `{plugin_dir}/<file>` where `<file>` is the `file` field from the JSON entry for that role (e.g. `{plugin_dir}/agents/dev.md`)
 - Fill the standard placeholders (see Spawning a Developer below for the full list)
 - Dispatch as a subagent
 
@@ -86,6 +86,7 @@ Available specialists for your stack (`{stack}`):
 You are a specialist in the Shura council.
 Repo path: {repo_path}
 Branch: {branch}
+Stack: {stack}
 Project: {project_name} ({ticket_id})
 Epic: {epic}
 Decisions log: {decisions_log}
@@ -97,7 +98,7 @@ Report all outputs and completion to your Product Owner.
 ---
 ```
 
-Fill `{repo_path}`, `{branch}`, `{project_name}`, `{ticket_id}`, `{epic}`, `{decisions_log}`, `{graph_report}` with the actual values when constructing the specialist's prompt.
+Fill `{repo_path}`, `{branch}`, `{stack}`, `{project_name}`, `{ticket_id}`, `{epic}`, `{decisions_log}`, `{graph_report}` with the actual values when constructing the specialist's prompt.
 
 ## Spawning a Developer
 
@@ -170,8 +171,8 @@ When the PM shares all POs' perspectives: read each position, address conflicts 
 ## Push Protocol
 
 When all tasks are done and all tests pass:
-1. Ask the Developer for the test command they used
-2. Re-run tests: `cd {repo_path} && <test command>`
+1. Use the `{test_command}` you provided when spawning the Developer
+2. Re-run tests: `cd {repo_path} && {test_command}`
 3. If tests pass: `git -C {repo_path} push origin {branch}`
 4. Notify Program Manager: "Repo {repo_name} complete, branch `{branch}` pushed. Specialists used: {list}."
 

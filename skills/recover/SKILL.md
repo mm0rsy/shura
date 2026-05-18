@@ -28,9 +28,9 @@ List and read all `.shura/repos/*/config.json`. Only proceed for repos where `ep
 **2. Load all agent prompt templates**
 
 Find the shura plugin directory (two levels up from `skills/recover/`). Read:
-- `agents/eng-manager.md`
+- `agents/po.md`
 
-(The Engineering Manager will read `agents/po.md` itself when spawning the PO; the PO will read `agents/dev.md` itself when spawning Devs.)
+(The Product Owner will read `agents/dev.md` itself when spawning Developers, and will load specialist skills from installed plugin directories as needed.)
 
 **3. Announce launch**
 
@@ -40,12 +40,12 @@ Recovering shura council for: {project_name}
 Repositories: {N} repos
   {for each repo: - {name} | branch: {branch}}
 
-Re-launching all teams simultaneously...
+Re-launching all Product Owner agents simultaneously...
 ```
 
-**4. Dispatch all Engineering Manager agents in parallel**
+**4. Dispatch all Product Owner agents in parallel**
 
-For each repo, fill `agents/eng-manager.md` placeholders:
+For each repo, fill `agents/po.md` placeholders:
 - `{repo_name}` → `repo.name`
 - `{project_name}` → `config.name`
 - `{ticket_id}` → `config.ticket`
@@ -56,8 +56,13 @@ For each repo, fill `agents/eng-manager.md` placeholders:
 - `{plugin_dir}` → absolute path to the shura plugin directory (two levels up from `skills/recover/`)
 - `{decisions_log}` → absolute path to `.shura/repos/<slug>/decisions.md`
 - `{graph_report}` → `repo.graph_report` (empty string if graphify was not run)
+- `{stack}` → `repo.stack` (empty string if not set)
+- `{skill_repos}` → `config.skill_repos` joined as comma-separated string (or `"none"` if empty)
+- `{must_use_skills}` → `repo.must_use_skills` as bullet list or empty string
+- `{recommended_skills}` → `repo.recommended_skills` as bullet list or empty string
+- `{specialist_roles_json}` → `JSON.stringify(repo.specialist_roles, null, 2)` (or `"{}"` if not set)
 
-Dispatch ALL Engineering Manager agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
+Dispatch ALL Product Owner agents simultaneously — send multiple Agent tool calls in a single message. Do not wait for one to finish before dispatching the next.
 
 **5. Update project status**
 
@@ -69,7 +74,7 @@ Update `.shura/config.json`: set `status` to `"running"`.
 ✓ All {N} teams re-launched.
 
 Each team is running:
-  Engineering Manager (EM) → will spawn PO → PO will spawn Dev(s)
+  Product Owner (PO) → will hire Developers and specialists as needed
 
 Use /get-manager to talk to the Program Manager and track overall progress.
 When teams complete, they will push their branches and notify the Program Manager.
@@ -77,7 +82,7 @@ When teams complete, they will push their branches and notify the Program Manage
 
 ## After Teams Complete
 
-Each Engineering Manager pushes its branch and notifies the Program Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
+Each Product Owner pushes its branch and notifies the Program Manager. The user then handles integration (merge, CI/CD pipeline, or manual review). Use /get-manager to get the final status summary.
 
 ## Re-running /recover
 

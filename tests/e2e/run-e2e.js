@@ -70,6 +70,7 @@ describe('E2E: detectStack on fixture repos (both skill repos installed)', () =>
     assert.equal(result.stack, 'python');
     assert.ok('Developer' in result.specialist_roles);
     assert.ok('Tester' in result.specialist_roles);
+    assert.equal(result.specialist_roles.Tester.source, 'skill', 'Tester.source not skill');
     assert.ok('Architect' in result.specialist_roles);
     assert.ok('Security Reviewer' in result.specialist_roles);
   });
@@ -79,7 +80,9 @@ describe('E2E: detectStack on fixture repos (both skill repos installed)', () =>
     const result = await detectStack(repoPath, BOTH_REPOS);
     assert.equal(result.stack, 'frontend');
     assert.ok('Tester' in result.specialist_roles, 'Tester missing');
+    assert.equal(result.specialist_roles.Tester.source, 'skill', 'Tester.source not skill');
     assert.ok('Architect' in result.specialist_roles, 'Architect missing');
+    assert.equal(result.specialist_roles.Architect.source, 'skill', 'Architect.source not skill');
   });
 
   test('claude-code-plugin fixture: Technical Writer present with both repos', async () => {
@@ -87,6 +90,7 @@ describe('E2E: detectStack on fixture repos (both skill repos installed)', () =>
     const result = await detectStack(repoPath, BOTH_REPOS);
     assert.equal(result.stack, 'claude-code-plugin');
     assert.ok('Technical Writer' in result.specialist_roles, 'Technical Writer missing');
+    assert.equal(result.specialist_roles['Technical Writer'].source, 'skill', 'Technical Writer.source not skill');
   });
 
   test('devops fixture: no must_use_skills even with both repos', async () => {
@@ -104,49 +108,56 @@ describe('E2E: detectStack on fixture repos (both skill repos installed)', () =>
     assert.ok(result.must_use_skills.includes('everything-claude-code:tdd'),
       `must_use_skills: ${JSON.stringify(result.must_use_skills)}`);
   });
+
+  test('data-ml-reqs fixture: ML Engineer and Tester present with both repos', async () => {
+    const repoPath = join(FIXTURES, 'data-ml-reqs');
+    const result = await detectStack(repoPath, BOTH_REPOS);
+    assert.equal(result.stack, 'data-ml');
+    assert.ok('ML Engineer' in result.specialist_roles, 'ML Engineer missing');
+    assert.equal(result.specialist_roles['ML Engineer'].source, 'skill', 'ML Engineer.source not skill');
+    assert.ok('Tester' in result.specialist_roles, 'Tester missing');
+  });
+
+  test('mobile-flutter fixture: Tester present with both repos', async () => {
+    const repoPath = join(FIXTURES, 'mobile-flutter');
+    const result = await detectStack(repoPath, BOTH_REPOS);
+    assert.equal(result.stack, 'mobile');
+    assert.ok('Tester' in result.specialist_roles, 'Tester missing');
+    assert.equal(result.specialist_roles.Tester.source, 'skill', 'Tester.source not skill');
+  });
+
+  test('cpp fixture: Tester present with both repos', async () => {
+    const repoPath = join(FIXTURES, 'cpp');
+    const result = await detectStack(repoPath, BOTH_REPOS);
+    assert.equal(result.stack, 'cpp');
+    assert.ok('Tester' in result.specialist_roles, 'Tester missing');
+    assert.equal(result.specialist_roles.Tester.source, 'skill', 'Tester.source not skill');
+  });
 });
 
 describe('E2E: config-writing simulation', () => {
   test('config object has all required fields after detectStack', async () => {
     const repoPath = join(FIXTURES, 'python');
-    const skillRepos = BOTH_REPOS;
-    const result = await detectStack(repoPath, skillRepos);
+    const result = await detectStack(repoPath, BOTH_REPOS);
 
-    const config = {
-      slug: 'my-repo',
-      name: 'My Repo',
-      type: 'local',
-      source: repoPath,
-      path: repoPath,
-      branch: 'my-project',
-      status: 'ready',
-      epic: '',
-      stack: result.stack,
-      must_use_skills: result.must_use_skills,
-      recommended_skills: result.recommended_skills,
-      specialist_roles: result.specialist_roles,
-      graph_report: '',
-    };
+    // Assert on the detectStack result directly (not on a constructed literal)
+    assert.ok(typeof result.stack === 'string' && result.stack.length > 0, 'stack is missing or empty');
+    assert.ok(Array.isArray(result.must_use_skills), 'must_use_skills is not an array');
+    assert.ok(Array.isArray(result.recommended_skills), 'recommended_skills is not an array');
+    assert.ok(
+      result.specialist_roles !== null &&
+      !Array.isArray(result.specialist_roles) &&
+      typeof result.specialist_roles === 'object',
+      'specialist_roles is not a plain object'
+    );
+    assert.ok(Object.keys(result.specialist_roles).length > 0, 'specialist_roles is empty');
 
-    // All required fields present
-    const required = [
-      'slug', 'name', 'type', 'source', 'path', 'branch',
-      'status', 'epic', 'stack', 'must_use_skills',
-      'recommended_skills', 'specialist_roles', 'graph_report'
-    ];
-    for (const field of required) {
-      assert.ok(field in config, `config missing field: ${field}`);
-    }
+    // Verify the result is JSON-serializable (no circular refs, no undefined values)
+    const serialized = JSON.stringify(result);
+    assert.ok(serialized.length > 10, 'detectStack result does not serialize to meaningful JSON');
 
-    // Stack is a non-empty string
-    assert.ok(config.stack.length > 0, 'stack is empty');
-
-    // specialist_roles is serializable to JSON (no circular refs, no undefined)
-    const serialized = JSON.stringify(config.specialist_roles);
-    assert.ok(serialized.length > 2, 'specialist_roles serializes to empty object');
-
-    // must_use_skills and recommended_skills are JSON arrays
-    const muStr = JSON.stringify(config.must_use_skills);
-    assert.ok(muStr.startsWith('['), 'must_use_skills not a JSON array');
+    // Verify all arrays serialize correctly
+    assert.ok(JSON.stringify(result.must_use_skills).startsWith('['), 'must_use_skills not a JSON array');
+    assert.ok(JSON.stringify(result.recommended_skills).startsWith('['), 'recommended_skills not a JSON array');
   });
 });

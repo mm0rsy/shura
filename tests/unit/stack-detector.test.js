@@ -143,7 +143,7 @@ describe('detectStack return shape', () => {
 
 describe('filtering by skillRepos', () => {
   test('empty skillRepos: only builtin entries survive in specialist_roles', async () => {
-    const dir = await makeFixture({ 'pyproject.toml': '' }); // python stack
+    const dir = await makeFixture({ 'pyproject.toml': '[tool.poetry]\nname = "app"' }); // python stack
     try {
       const r = await detectStack(dir, []);
       const sources = Object.values(r.specialist_roles).map(v => v.source);
@@ -152,10 +152,18 @@ describe('filtering by skillRepos', () => {
   });
 
   test('empty skillRepos: must_use_skills is empty array', async () => {
-    const dir = await makeFixture({ 'pyproject.toml': '' });
+    const dir = await makeFixture({ 'pyproject.toml': '[tool.poetry]\nname = "app"' });
     try {
       const r = await detectStack(dir, []);
       assert.deepEqual(r.must_use_skills, []);
+    } finally { await cleanup(dir); }
+  });
+
+  test('empty skillRepos: recommended_skills is empty array', async () => {
+    const dir = await makeFixture({ 'pyproject.toml': '[tool.poetry]\nname = "app"' });
+    try {
+      const r = await detectStack(dir, []);
+      assert.deepEqual(r.recommended_skills, []);
     } finally { await cleanup(dir); }
   });
 
@@ -197,6 +205,8 @@ describe('filtering by skillRepos', () => {
       assert.ok(roles.includes('Developer'), 'Developer missing');
       assert.ok(roles.includes('Tester'), 'Tester missing');
       assert.ok(roles.includes('Architect'), 'Architect missing');
+      assert.ok(roles.includes('Database Engineer'), 'Database Engineer missing');
+      assert.ok(roles.includes('Security Reviewer'), 'Security Reviewer missing');
     } finally { await cleanup(dir); }
   });
 

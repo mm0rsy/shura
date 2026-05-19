@@ -1,4 +1,4 @@
-import { test, describe } from 'node:test';
+import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -12,38 +12,42 @@ const EXPECTED_STACKS = [
   'devops', 'data-ml', 'python', 'cpp', 'claude-code-plugin'
 ];
 
+// Known external skill repo namespaces (from CLAUDE.md + stack-detector.js)
 const KNOWN_NAMESPACES = ['everything-claude-code', 'claude-skills'];
 
-let skillMap;
-
 describe('skill-map.json schema', () => {
-  test('file loads and parses as valid JSON', async () => {
+  let skillMap;
+
+  before(async () => {
     const raw = await readFile(MAP_PATH, 'utf8');
     skillMap = JSON.parse(raw);
-    assert.equal(typeof skillMap, 'object');
   });
 
-  test('all 9 stacks are present', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('file loads and parses as valid JSON', () => {
+    assert.equal(typeof skillMap, 'object');
+    assert.ok(skillMap !== null);
+  });
+
+  test('all 9 stacks are present', () => {
     for (const stack of EXPECTED_STACKS) {
       assert.ok(stack in skillMap, `missing stack: ${stack}`);
     }
   });
 
-  test('each stack has must_use, recommended, specialist_roles arrays/objects', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('each stack has must_use, recommended, specialist_roles with correct types', () => {
     for (const [stack, entry] of Object.entries(skillMap)) {
       assert.ok(Array.isArray(entry.must_use), `${stack}.must_use not array`);
       assert.ok(Array.isArray(entry.recommended), `${stack}.recommended not array`);
-      assert.equal(typeof entry.specialist_roles, 'object', `${stack}.specialist_roles not object`);
+      assert.ok(
+        entry.specialist_roles !== null &&
+        !Array.isArray(entry.specialist_roles) &&
+        typeof entry.specialist_roles === 'object',
+        `${stack}.specialist_roles must be a plain object`
+      );
     }
   });
 
-  test('Developer is builtin in every stack', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('Developer is builtin in every stack', () => {
     for (const [stack, entry] of Object.entries(skillMap)) {
       const dev = entry.specialist_roles?.Developer;
       assert.ok(dev, `${stack} missing Developer`);
@@ -52,9 +56,7 @@ describe('skill-map.json schema', () => {
     }
   });
 
-  test('all skill namespaces in must_use and recommended are known', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('all skill namespaces in must_use and recommended are known', () => {
     for (const [stack, entry] of Object.entries(skillMap)) {
       for (const skill of [...entry.must_use, ...entry.recommended]) {
         const ns = skill.split(':')[0];
@@ -64,9 +66,7 @@ describe('skill-map.json schema', () => {
     }
   });
 
-  test('all skill-source roles have a name field with known namespace', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('all skill-source roles have a name field with known namespace; builtin roles have file field', () => {
     for (const [stack, entry] of Object.entries(skillMap)) {
       for (const [role, cfg] of Object.entries(entry.specialist_roles)) {
         if (cfg.source === 'skill') {
@@ -82,9 +82,7 @@ describe('skill-map.json schema', () => {
     }
   });
 
-  test('devops has empty must_use (it is the only stack with no required skills)', async () => {
-    const raw = await readFile(MAP_PATH, 'utf8');
-    skillMap = JSON.parse(raw);
+  test('devops has empty must_use (it is the only stack with no required skills)', () => {
     assert.deepEqual(skillMap.devops.must_use, []);
   });
 });

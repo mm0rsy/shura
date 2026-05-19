@@ -2,37 +2,31 @@
 stack: mobile
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - Mobile Developer
-  optional:
-    - UX Designer
-    - QA Engineer
-    - Performance Engineer
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
+    - Security Reviewer
 ---
 
 # Mobile Team Template
 
-This template is used for repositories classified as `mobile` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `mobile` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements mobile UI features, platform integrations, and business logic. Follows existing patterns, platform conventions, and test suite. Commits changes and reports to PO.
 
-### Mobile Developer
-Implements features, screens, and platform-specific integrations for `{repo_name}`. Follows the project's navigation structure, state management patterns, and test conventions. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Architect (hire when: new screens or navigation flows, significant state management changes, or cross-platform concerns)
+Designs the mobile implementation approach — navigation, state, platform APIs — before coding begins. Delivers a design the Developer can follow directly.
 
-## Optional Roles
+### Tester (hire when: critical flows affected, platform-specific behavior untested, or regression risk is high)
+Writes and runs tests for affected flows. Delivers a coverage report.
 
-### UX Designer
-Produces platform-appropriate interaction specs and screen designs for the `{epic}` feature set. Delivers assets aligned with iOS and Android conventions so the Mobile Developer can implement without ambiguity.
-
-### QA Engineer
-Executes manual and automated test scenarios across target devices and OS versions for `{epic}` changes in `{repo_name}`. Reports defects with reproduction steps.
-
-### Performance Engineer
-Profiles startup time, memory usage, frame rate, and battery impact. Provides actionable recommendations scoped to `{epic}` changes in `{repo_name}`.
+### Security Reviewer (hire when: auth changes, local data storage, new network requests, or permissions changes)
+Audits mobile-specific security concerns — local storage, keychain, network calls, permissions. Delivers findings with remediation.

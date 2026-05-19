@@ -14,6 +14,7 @@ Run from inside the shura project directory (where `.shura/config.json` exists).
 Read `.shura/config.json` to get:
 - `name` (project slug) — used as the branch name
 - `ticket` — for context
+- `skill_repos` — list of installed skill repo slugs (may be empty or missing; default to `[]`)
 
 ## Step 1: Ask for repo details
 
@@ -78,7 +79,23 @@ git -C <absolute-path-to-project>/repos/<slug> \
   checkout -b <project-name> origin/<base-branch>
 ```
 
-## Step 3: Write repo config
+## Step 3: Detect stack and build team catalogue
+
+After the repo is checked out/cloned, run stack detection.
+
+Read `skill_repos` from `.shura/config.json` (default `[]` if missing).
+
+Call the stack detector:
+
+```js
+import { detectStack } from './stack-detector.js';
+const result = await detectStack(repoPath, skillRepos);
+// result = { stack, must_use_skills, recommended_skills, specialist_roles }
+```
+
+The stack detector reads `skill-map.json` (in the same directory) and filters results to only include skills from installed repos. If `skillRepos` is empty, only `source: "builtin"` specialist entries survive (always at least `Developer`).
+
+## Step 4: Write repo config
 
 Create directory `.shura/repos/<slug>/` and write `.shura/repos/<slug>/config.json`:
 
@@ -92,38 +109,21 @@ Create directory `.shura/repos/<slug>/` and write `.shura/repos/<slug>/config.js
   "branch": "<project-name>",
   "status": "ready",
   "epic": "",
-  "stack": "<detected-stack>",
-  "team": {
-    "mandatory": ["Engineering Manager", "Product Owner", "<stack-specific-developer>"],
-    "optional": ["<optional-role-1>", "<optional-role-2>"]
-  }
+  "stack": "<result.stack>",
+  "must_use_skills": ["<result.must_use_skills entries>"],
+  "recommended_skills": ["<result.recommended_skills entries>"],
+  "specialist_roles": {
+    "<role-name>": {"source": "<builtin|skill>", "file": "<path-if-builtin>", "name": "<skill-name-if-skill>"}
+  },
+  "graph_report": ""
 }
 ```
 
+Use the actual values from `result`. Write `must_use_skills` and `recommended_skills` as JSON arrays (may be empty `[]`). Write `specialist_roles` as the filtered object from `result.specialist_roles`.
+
 Update `.shura/config.json`: set `status` to `"repos-added"` (unless it's already `"goal-set"` or later — don't downgrade).
 
-## Step 3.5: Detect stack and load team template
-
-After the repo is checked out/cloned, detect its tech stack:
-
-```js
-import { detectStack } from './stack-detector.js';
-const stack = await detectStack(repoPath);
-```
-
-Load the matching team template from the plugin directory (two levels up from `skills/add-repo/`):
-
-```
-agents/templates/{stack}.md
-```
-
-Parse the YAML frontmatter of that template file to extract:
-- `roles.mandatory` — the list of mandatory role names for this stack
-- `roles.optional` — the list of optional role names
-
-Store these as `team.mandatory` and `team.optional`.
-
-## Step 4: Index the repo with graphify
+## Step 5: Index the repo with graphify
 
 Check if graphify is installed:
 ```bash
@@ -143,7 +143,7 @@ graphify --version
   > "graphify not found — repo knowledge graph unavailable. Agents will explore the codebase without a pre-built index. Install with: `uv tool install graphifyy && graphify install`"
 - Set `"graph_report": ""` in config
 
-## Step 5: Confirm
+## Step 6: Confirm
 
 ```
 ✓ Repo registered: <name>
@@ -153,11 +153,15 @@ graphify --version
   Branch:  <project-name>
   Type:    <Local worktree | Remote clone>
   Stack:   <detected-stack>
-  Team:    <mandatory-role-1>, <mandatory-role-2>, ... (+ <N> optional)
+  Skills:  <N> recommended, <M> must-use  [or: "none (no skill repos configured)"]
+  Roles:   <role1>, <role2>, ...  [or: "Developer only (no skill repos configured)"]
   Graph:   <GRAPH_REPORT.md path | "not indexed (graphify not installed)">
 
 Run /add-repo again to add more repos, or /goal to set the mission.
 ```
+
+For Skills line: if `skillRepos` is empty (from config), show `"none (no skill repos configured)"`; otherwise show the actual counts.
+For Roles line: list the keys of `specialist_roles`. If only `Developer` is present and `skillRepos` is empty, show `"Developer only (no skill repos configured)"`; otherwise just list the role names.
 
 ## Error Handling
 

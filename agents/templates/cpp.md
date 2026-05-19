@@ -2,33 +2,27 @@
 stack: cpp
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - C++ Developer
-  optional:
-    - Performance Engineer
+  catalogue:
+    - Developer
+    - Tester
     - Security Reviewer
 ---
 
 # C++ Team Template
 
-This template is used for repositories classified as `cpp` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `cpp` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements C++ changes following existing build system conventions (CMake), code style, and test suite. Commits changes and reports to PO.
 
-### C++ Developer
-Implements features, libraries, and system components for `{repo_name}` following the project's build system conventions (e.g., CMake), coding standards, and test suite. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Tester (hire when: critical logic affected, undefined behavior risk, or coverage gaps in the test suite)
+Writes and runs tests using the project's test framework (Google Test, Catch2, etc.). Delivers coverage report and new test files.
 
-## Optional Roles
-
-### Performance Engineer
-Profiles CPU, memory, and latency characteristics of `{epic}` changes in `{repo_name}`. Uses tooling appropriate to the platform (e.g., perf, Valgrind, VTune) and delivers actionable optimization recommendations.
-
-### Security Reviewer
-Audits memory safety, integer handling, third-party dependency exposure, and attack surface introduced by `{epic}` changes. Delivers findings with severity ratings and concrete remediation guidance for the C++ Developer.
+### Security Reviewer (hire when: memory management changes, external input parsing, network code, or new dependencies)
+Audits for memory safety, integer overflow, injection, and unsafe API usage. Delivers findings with remediation.

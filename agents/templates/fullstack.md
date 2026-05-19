@@ -2,37 +2,35 @@
 stack: fullstack
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - Full-Stack Developer
-  optional:
-    - UX Designer
-    - DevOps Engineer
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
     - Database Engineer
+    - Security Reviewer
 ---
 
 # Full-Stack Team Template
 
-This template is used for repositories classified as `fullstack` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `fullstack` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements both frontend UI and backend API changes. Follows existing conventions end-to-end. Commits changes and reports to PO.
 
-### Full-Stack Developer
-Implements features spanning both client and server layers in `{repo_name}`. Follows existing conventions for the frontend framework, backend routing, and data access. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Architect (hire when: full-stack feature requiring new data models + UI flows, or significant structural changes to either layer)
+Designs the end-to-end approach — data model, API contract, UI flow — before implementation begins. Delivers a doc the Developer can follow without interpretation gaps.
 
-## Optional Roles
+### Tester (hire when: critical user-facing flows affected, or end-to-end integration is untested)
+Writes and runs tests covering both API and UI behavior for the epic. Delivers coverage report.
 
-### UX Designer
-Produces interaction specs and visual designs for the `{epic}` feature set. Delivers assets in a format the Full-Stack Developer can implement without interpretation gaps.
+### Database Engineer (hire when: schema changes required or query performance is a concern)
+Designs migrations and reviews query patterns. Delivers migration scripts and recommendations.
 
-### DevOps Engineer
-Configures or updates CI/CD pipelines, environment variables, and deployment manifests needed to ship `{epic}` changes from `{repo_name}` to production.
-
-### Database Engineer
-Designs or reviews schema changes, migrations, and query performance relevant to `{epic}`. Provides migration scripts and index recommendations for the Full-Stack Developer to apply.
+### Security Reviewer (hire when: auth flows, new APIs, or sensitive data access paths are changed)
+Audits the full-stack change for security issues. Delivers findings with remediation guidance.

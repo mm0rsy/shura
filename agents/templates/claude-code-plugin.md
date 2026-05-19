@@ -2,33 +2,35 @@
 stack: claude-code-plugin
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - JS/ESM Developer
-    - Prompt Engineer
-  optional:
-    - Docs Developer
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
+    - Technical Writer
+    - Security Reviewer
 ---
 
 # Claude Code Plugin Team Template
 
-This template is used for repositories classified as `claude-code-plugin` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `claude-code-plugin` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements skill entry points, helper modules, and plugin scaffolding using ES module conventions. Follows SKILL.md frontmatter format, existing file layout under `skills/`, and the project's test suite. Commits changes and reports to PO.
 
-### JS/ESM Developer
-Implements skill entry points, helper modules, and plugin scaffolding for `{repo_name}` using ES module conventions. Follows the SKILL.md frontmatter format, existing file layout under `skills/`, and the project's test suite. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Architect (hire when: new skill categories, significant refactoring of plugin layout, or introducing agent templates)
+Designs the plugin structure — skill organization, placeholder conventions, agent hierarchy. Delivers a design the Developer can implement without gaps.
 
-### Prompt Engineer
-Authors and refines agent prompt templates under `agents/` for `{repo_name}`. Ensures `{snake_case_placeholder}` conventions are used consistently, descriptions are trigger-scoped (not workflow summaries), and prompts are unambiguous for the roles they address. Coordinates with the JS/ESM Developer when prompts are loaded and dispatched by skill code.
+### Tester (hire when: skill dispatch logic changes, new agent prompts added, or regression risk is high)
+Writes and runs tests for affected skill logic and agent dispatch. Delivers coverage report.
 
-## Optional Roles
+### Technical Writer (hire when: new commands, new skills, or agent hierarchy changes need user-facing documentation)
+Updates README, CLAUDE.md, and skill/agent documentation. Ensures docs match actual behavior — no duplication of frontmatter content into prose.
 
-### Docs Developer
-Updates or creates Markdown documentation (`{docs_path}`) covering `{epic}` changes. Keeps docs consistent with skill and agent behavior — no duplication of frontmatter content into prose.
+### Security Reviewer (hire when: new external tool invocations, plugin manifest changes, or MCP server components added)
+Audits plugin security — manifest scopes, tool permissions, external API calls. Delivers findings with remediation.

@@ -1,0 +1,124 @@
+{
+  "frontend": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:frontend"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Accessibility Reviewer": {"source": "skill", "name": "claude-skills:engineering-core"},
+      "Performance Engineer": {"source": "skill", "name": "claude-skills:engineering-core"}
+    }
+  },
+  "backend": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:backend"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Database Engineer": {"source": "skill", "name": "everything-claude-code:database-designer"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "fullstack": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:frontend",
+      "claude-skills:backend"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Database Engineer": {"source": "skill", "name": "everything-claude-code:database-designer"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "mobile": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:engineering-core"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "devops": {
+    "must_use": [],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:devops"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Security Auditor": {"source": "skill", "name": "everything-claude-code:security-review"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"}
+    }
+  },
+  "data-ml": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "claude-skills:rag-architect",
+      "claude-skills:ml-pipeline",
+      "everything-claude-code:security-review"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "ML Engineer": {"source": "skill", "name": "claude-skills:ml-pipeline"},
+      "Data Architect": {"source": "skill", "name": "claude-skills:rag-architect"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "python": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:backend"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "cpp": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:security-review",
+      "claude-skills:engineering-core"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  },
+  "claude-code-plugin": {
+    "must_use": ["everything-claude-code:tdd"],
+    "recommended": [
+      "everything-claude-code:mcp-server-builder",
+      "everything-claude-code:security-review"
+    ],
+    "specialist_roles": {
+      "Developer": {"source": "builtin", "file": "agents/dev.md"},
+      "Tester": {"source": "skill", "name": "claude-skills:qa"},
+      "Architect": {"source": "skill", "name": "everything-claude-code:architect"},
+      "Technical Writer": {"source": "skill", "name": "claude-skills:engineering-core"},
+      "Security Reviewer": {"source": "skill", "name": "everything-claude-code:security-review"}
+    }
+  }
+}

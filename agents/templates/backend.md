@@ -2,33 +2,35 @@
 stack: backend
 roles:
   mandatory:
-    - Engineering Manager
     - Product Owner
-    - Backend Developer
-  optional:
+  catalogue:
+    - Developer
+    - Tester
+    - Architect
     - Database Engineer
     - Security Reviewer
 ---
 
 # Backend Team Template
 
-This template is used for repositories classified as `backend` stack. All roles operate within the context of `{repo_name}` on branch `{branch}` for epic `{epic}`.
+Used for `backend` stack repositories. The Product Owner leads the team and hires specialists as needed.
 
-## Mandatory Roles
+## Product Owner
+Owns the epic, coordinates directly with the Program Manager, breaks the epic into tasks, hires specialists from the catalogue, and handles push when done.
 
-### Engineering Manager
-Owns the epic, coordinates with the Program Manager, and ensures the team stays unblocked. Spawns the Product Owner at epic start. Does not assign tasks to Developers directly.
+## Hiring Catalogue
 
-### Product Owner
-Breaks the epic into Developer tasks, dispatches Developer agents, and tracks completion. Escalates blockers to the Engineering Manager. Reports task status for `{repo_name}`.
+### Developer (always hire)
+Implements API endpoints, business logic, and service integrations. Follows existing module structure, error-handling conventions, and test suite. Commits changes and reports to PO.
 
-### Backend Developer
-Implements API endpoints, business logic, and service integrations for `{repo_name}`. Follows existing module structure, error-handling conventions, and test suite. Commits changes to `{branch}` and reports completion to the Product Owner.
+### Architect (hire when: new services, significant API redesign, cross-service dependencies, or ambiguous implementation path)
+Produces a technical design scoped to the epic. Delivers interface contracts and implementation guidance the Developer can follow directly.
 
-## Optional Roles
+### Tester (hire when: critical business logic affected, coverage gaps, or integration paths untested)
+Writes and runs tests for affected endpoints and business logic. Delivers test coverage report and new test files.
 
-### Database Engineer
-Designs or reviews schema changes, migrations, and query performance relevant to `{epic}`. Provides migration scripts and index recommendations for the Backend Developer to apply.
+### Database Engineer (hire when: schema migrations required, query performance concerns, or new data models)
+Designs migrations and reviews query patterns for the epic. Delivers migration scripts and index recommendations.
 
-### Security Reviewer
-Audits authentication, authorization, input validation, and dependency exposure introduced by `{epic}` changes. Delivers a findings report with severity ratings and remediation guidance.
+### Security Reviewer (hire when: auth/authz changes, new external APIs, new dependencies, or data exposure paths)
+Audits authentication, authorization, input validation, and dependency exposure. Delivers findings with severity ratings and remediation guidance.
